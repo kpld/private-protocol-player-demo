@@ -21,15 +21,17 @@ following the receiver rules in [../../protocol.md](../../protocol.md):
 - Short read / EOF handling that lets ijkplayer's reconnect logic engage
   instead of hanging when the server dies.
 
-## Files to touch (confirm exact paths against the k0.8.8 tree when building)
+## Files to touch (verified 2026-11-09 against the actual ijk FFmpeg tree, ff3.4--ijk0.8.7--20180103--001 — see `docs/build-companion.md`)
 
 | File | Change |
 |---|---|
-| `libavformat/kpld.c` | **New.** The URLProtocol implementation (~250 lines). |
-| `libavformat/Makefile` | Register `kpld.o` under the kpld protocol. |
-| `libavformat/allformats.c` (or the tree's registration mechanism) | Register `ff_kpld_protocol`. |
-| `libavformat/protocols.c` / configure lists, if the tree requires it | Enable `CONFIG_KPLD_PROTOCOL`. |
-| ijkplayer FFmpeg build config (`module-lite*.sh` / ijk ffmpeg configure flags) | Make sure the protocol is not compiled out by the lite module list. |
+| `libavformat/kpld.c` | **New.** The URLProtocol implementation (~250 lines). Minimal model: `data_uri.c`; network model: `tcp.c`. |
+| `libavformat/protocols.c` | Add `extern const URLProtocol ff_kpld_protocol;` — configure auto-generates the protocol list from this file (`find_things_extern`), so **no configure list edit is needed**. |
+| `libavformat/Makefile` | Add `OBJS-$(CONFIG_KPLD_PROTOCOL) += kpld.o` (next to the tcp.o line). |
+| ijkplayer FFmpeg build config | Nothing to change: the default `config/module-lite.sh` starts from `--enable-protocols`, so kpld is built unless explicitly disabled. Verify after configure: `CONFIG_KPLD_PROTOCOL 1` in the generated `config.h`. |
+
+Note the patch applies to the per-arch FFmpeg copy ijkplayer builds from
+(`android/contrib/ffmpeg-arm64`), not to a random upstream FFmpeg checkout.
 
 ## Deliverable form
 
