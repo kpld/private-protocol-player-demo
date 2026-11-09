@@ -1,0 +1,248 @@
+profiler build: NO
+
+[arm64-v8a] Prebuilt       : libijkffmpeg.so <= /home/hatch/workspace/projects/ijkplayer-build/android/contrib/build/ffmpeg-arm64/output/
+[arm64-v8a] Compile        : ijkplayer <= ff_cmdutils.c
+[arm64-v8a] Compile        : ijkplayer <= ff_ffplay.c
+[arm64-v8a] Compile        : ijkplayer <= ff_ffpipeline.c
+[arm64-v8a] Compile        : ijkplayer <= ff_ffpipenode.c
+[arm64-v8a] Compile        : ijkplayer <= ijkmeta.c
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c: In function 'convert_image':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c:526:5: warning: 'avcodec_encode_video2' is deprecated (declared at /home/hatch/workspace/projects/ijkplayer-build/android/contrib/build/ffmpeg-arm64/output/include/libavcodec/avcodec.h:5509) [-Wdeprecated-declarations]
+     ret = avcodec_encode_video2(img_info->frame_img_codec_ctx, &avpkt, dst_frame, &got_packet);
+     ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c:531:9: warning: format '%lld' expects argument of type 'long long int', but argument 3 has type 'int64_t' [-Wformat=]
+         sprintf(file_name, "%lld", src_frame_pts);
+         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c: In function 'queue_picture':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c:1537:21: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+                     av_log(NULL, AV_LOG_INFO, "video accurate_seek start, is->seek_pos=%lld, pts=%lf, is->accurate_seek_time = %lld\n", is->seek_pos, pts, is->accurate_seek_start_time);
+                     ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c:1537:21: warning: format '%lld' expects argument of type 'long long int', but argument 6 has type 'int64_t' [-Wformat=]
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c:1560:21: warning: format '%lld' expects argument of type 'long long int', but argument 5 has type 'int64_t' [-Wformat=]
+                     av_log(NULL, AV_LOG_WARNING, "video accurate_seek is error, is->drop_vframe_count=%d, now = %lld, pts = %lf\n", is->drop_vframe_count, now, pts);
+                     ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c:1564:17: warning: format '%lld' expects argument of type 'long long int', but argument 5 has type 'int64_t' [-Wformat=]
+                 av_log(NULL, AV_LOG_INFO, "video accurate_seek is ok, is->drop_vframe_count =%d, is->seek_pos=%lld, pts=%lf\n", is->drop_vframe_count, is->seek_pos, pts);
+                 ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c: In function 'audio_thread':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c:2022:33: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+                                 av_log(NULL, AV_LOG_INFO, "audio accurate_seek start, is->seek_pos=%lld, audio_clock=%lf, is->accurate_seek_start_time = %lld\n", is->seek_pos, audio_clock, is->accurate_seek_start_time);
+                                 ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c:2022:33: warning: format '%lld' expects argument of type 'long long int', but argument 6 has type 'int64_t' [-Wformat=]
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ff_ffplay.c:2079:25: warning: format '%lld' expects argument of type 'long long int', but argument 5 has type 'int64_t' [-Wformat=]
+                         av_log(NULL, AV_LOG_INFO, "audio accurate_seek is error, is->drop_aframe_count=%d, now = %lld, audio_clock = %lf\n", is->drop_aframe_count, now, audio_clock);
+                         ^
+[arm64-v8a] Compile        : ijkplayer <= ijkplayer.c
+[arm64-v8a] Compile        : ijkplayer <= ffpipeline_ffplay.c
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkplayer.c: In function 'ijkmp_set_frame_at_time':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkplayer.c:153:5: warning: format '%lld' expects argument of type 'long long int', but argument 6 has type 'int64_t' [-Wformat=]
+     MPTRACE("%s(%s,%lld,%lld,%d,%d)\n", __func__, path, start_time, end_time, num, definition);
+     ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkplayer.c:153:5: warning: format '%lld' expects argument of type 'long long int', but argument 7 has type 'int64_t' [-Wformat=]
+[arm64-v8a] Compile        : ijkplayer <= ffpipenode_ffplay_vdec.c
+[arm64-v8a] Compile        : ijkplayer <= ffmpeg_api_jni.c
+[arm64-v8a] Compile        : ijkplayer <= ijkplayer_android.c
+[arm64-v8a] Compile        : ijkplayer <= ijkplayer_jni.c
+[arm64-v8a] Compile        : ijkplayer <= ffpipeline_android.c
+[arm64-v8a] Compile        : ijkplayer <= ffpipenode_android_mediacodec_vdec.c
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/android/pipeline/ffpipenode_android_mediacodec_vdec.c: In function 'feed_input_buffer2':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/android/pipeline/ffpipenode_android_mediacodec_vdec.c:509:9: warning: 'av_packet_split_side_data' is deprecated (declared at /home/hatch/workspace/projects/ijkplayer-build/android/contrib/build/ffmpeg-arm64/output/include/libavcodec/avcodec.h:4707) [-Wdeprecated-declarations]
+         av_packet_split_side_data(&pkt);
+         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/android/pipeline/ffpipenode_android_mediacodec_vdec.c:550:17: warning: 'avcodec_decode_video2' is deprecated (declared at /home/hatch/workspace/projects/ijkplayer-build/android/contrib/build/ffmpeg-arm64/output/include/libavcodec/avcodec.h:4994) [-Wdeprecated-declarations]
+                 change_ret = avcodec_decode_video2(new_avctx, frame, &got_picture, avpkt);
+                 ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/android/pipeline/ffpipenode_android_mediacodec_vdec.c: In function 'feed_input_buffer':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/android/pipeline/ffpipenode_android_mediacodec_vdec.c:757:9: warning: 'av_packet_split_side_data' is deprecated (declared at /home/hatch/workspace/projects/ijkplayer-build/android/contrib/build/ffmpeg-arm64/output/include/libavcodec/avcodec.h:4707) [-Wdeprecated-declarations]
+         av_packet_split_side_data(&pkt);
+         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/android/pipeline/ffpipenode_android_mediacodec_vdec.c:797:17: warning: 'avcodec_decode_video2' is deprecated (declared at /home/hatch/workspace/projects/ijkplayer-build/android/contrib/build/ffmpeg-arm64/output/include/libavcodec/avcodec.h:4994) [-Wdeprecated-declarations]
+                 change_ret = avcodec_decode_video2(new_avctx, frame, &got_picture, avpkt);
+                 ^
+[arm64-v8a] Compile        : ijkplayer <= allformats.c
+[arm64-v8a] Compile        : ijkplayer <= ijklivehook.c
+[arm64-v8a] Compile        : ijkplayer <= ijkmediadatasource.c
+[arm64-v8a] Compile        : ijkplayer <= ijkio.c
+[arm64-v8a] Compile        : ijkplayer <= ijkiomanager.c
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiomanager.c: In function 'enu_save':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiomanager.c:84:9: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+         snprintf(string, CONFIG_MAX_LINE, "entry_logical_pos:%lld\n", entry->logical_pos);
+         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiomanager.c:88:9: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+         snprintf(string, CONFIG_MAX_LINE, "entry_physical_pos:%lld\n", entry->physical_pos);
+         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiomanager.c:92:9: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+         snprintf(string, CONFIG_MAX_LINE, "entry_size:%lld\n", entry->size);
+         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiomanager.c: In function 'ijkio_manager_save_tree_to_file':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiomanager.c:109:9: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+         snprintf(string, CONFIG_MAX_LINE, "tree_index:%lld\n", key);
+         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiomanager.c:113:9: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+         snprintf(string, CONFIG_MAX_LINE, "tree_physical_init_pos:%lld\n", info->physical_init_pos);
+         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiomanager.c:117:9: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+         snprintf(string, CONFIG_MAX_LINE, "tree_physical_size:%lld\n", info->physical_size);
+         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiomanager.c:121:9: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+         snprintf(string, CONFIG_MAX_LINE, "tree_file_size:%lld\n", info->file_size);
+         ^
+[arm64-v8a] Compile        : ijkplayer <= ijkiocache.c
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiocache.c: In function 'ijkio_cache_open':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiocache.c:610:25: warning: format '%lld' expects argument of type 'long long int', but argument 4 has type 'int64_t' [-Wformat=]
+                         av_log(NULL, AV_LOG_WARNING, "ijkio cache exist is error, will delete last_physical_pos = %lld, cur_exist_file_size = %lld\n", *c->last_physical_pos, cur_exist_file_size);
+                         ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkplayer/ijkavformat/ijkiocache.c:610:25: warning: format '%lld' expects argument of type 'long long int', but argument 5 has type 'int64_t' [-Wformat=]
+[arm64-v8a] Compile        : ijkplayer <= ijkioffio.c
+[arm64-v8a] Compile        : ijkplayer <= ijkioandroidio.c
+[arm64-v8a] Compile        : ijkplayer <= ijkioprotocol.c
+[arm64-v8a] Compile        : ijkplayer <= ijkioapplication.c
+[arm64-v8a] Compile        : ijkplayer <= ijkiourlhook.c
+[arm64-v8a] Compile        : ijkplayer <= ijkasync.c
+[arm64-v8a] Compile        : ijkplayer <= ijkurlhook.c
+[arm64-v8a] Compile        : ijkplayer <= ijklongurl.c
+[arm64-v8a] Compile        : ijkplayer <= ijksegment.c
+[arm64-v8a] Compile        : ijkplayer <= ijkdict.c
+[arm64-v8a] Compile        : ijkplayer <= ijkutils.c
+[arm64-v8a] Compile        : ijkplayer <= ijkthreadpool.c
+[arm64-v8a] Compile        : ijkplayer <= ijktree.c
+[arm64-v8a] Compile        : ijkplayer <= ijkfifo.c
+[arm64-v8a] Compile++      : ijkplayer <= ijkstl.cpp
+[arm64-v8a] Compile        : ijksdl <= ijksdl_aout.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_audio.c
+cc1plus: warning: command line option '-std=c99' is valid for C/ObjC but not for C++
+[arm64-v8a] Compile        : ijksdl <= ijksdl_egl.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_error.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_mutex.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_stdinc.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_thread.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_timer.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_vout.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_extra_log.c
+[arm64-v8a] Compile        : ijksdl <= color.c
+[arm64-v8a] Compile        : ijksdl <= common.c
+[arm64-v8a] Compile        : ijksdl <= renderer.c
+[arm64-v8a] Compile        : ijksdl <= renderer_rgb.c
+[arm64-v8a] Compile        : ijksdl <= renderer_yuv420p.c
+[arm64-v8a] Compile        : ijksdl <= renderer_yuv444p10le.c
+[arm64-v8a] Compile        : ijksdl <= shader.c
+[arm64-v8a] Compile        : ijksdl <= rgb.fsh.c
+[arm64-v8a] Compile        : ijksdl <= yuv420p.fsh.c
+[arm64-v8a] Compile        : ijksdl <= yuv444p10le.fsh.c
+[arm64-v8a] Compile        : ijksdl <= mvp.vsh.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_vout_dummy.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_vout_overlay_ffmpeg.c
+[arm64-v8a] Compile        : ijksdl <= image_convert.c
+[arm64-v8a] Compile        : ijksdl <= android_audiotrack.c
+[arm64-v8a] Compile        : ijksdl <= android_nativewindow.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_android_jni.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_aout_android_audiotrack.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_aout_android_opensles.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_codec_android_mediacodec_dummy.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_codec_android_mediacodec_internal.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_codec_android_mediacodec_java.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_codec_android_mediacodec.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_codec_android_mediadef.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_codec_android_mediaformat_java.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_codec_android_mediaformat.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_vout_android_nativewindow.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_vout_android_surface.c
+[arm64-v8a] Compile        : ijksdl <= ijksdl_vout_overlay_android_mediacodec.c
+[arm64-v8a] Compile        : cpufeatures <= cpu-features.c
+/home/hatch/opt/android-ndk-r10e/sources/android/cpufeatures/cpu-features.c:196:1: warning: 'extract_cpuinfo_field' defined but not used [-Wunused-function]
+ extract_cpuinfo_field(const char* buffer, int buflen, const char* field)
+ ^
+/home/hatch/opt/android-ndk-r10e/sources/android/cpufeatures/cpu-features.c:246:1: warning: 'has_list_item' defined but not used [-Wunused-function]
+ has_list_item(const char* list, const char* item)
+ ^
+/home/hatch/opt/android-ndk-r10e/sources/android/cpufeatures/cpu-features.c:319:1: warning: 'parse_hexadecimal' defined but not used [-Wunused-function]
+ parse_hexadecimal(const char* input, const char* limit, int* result)
+ ^
+[arm64-v8a] Compile++      : yuv_static <= compare.cc
+[arm64-v8a] Compile++      : yuv_static <= compare_common.cc
+[arm64-v8a] Compile++      : yuv_static <= compare_posix.cc
+[arm64-v8a] Compile++      : yuv_static <= convert.cc
+[arm64-v8a] Compile++      : yuv_static <= convert_argb.cc
+[arm64-v8a] Compile++      : yuv_static <= convert_from.cc
+[arm64-v8a] Compile++      : yuv_static <= convert_from_argb.cc
+In file included from /home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkyuv/source/convert.cc:18:0:
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkyuv/source/convert.cc: In function 'int libyuv::RAWToI420(const uint8*, int, uint8*, int, uint8*, int, uint8*, int, int, int)':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkyuv/source/convert.cc:1086:21: warning: unused variable 'row' [-Wunused-variable]
+     align_buffer_64(row, kRowSize * 2);
+                     ^
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijkyuv/include/libyuv/row.h:28:10: note: in definition of macro 'align_buffer_64'
+   uint8* var = reinterpret_cast<uint8*>                                        \
+          ^
+[arm64-v8a] Compile++      : yuv_static <= convert_to_argb.cc
+[arm64-v8a] Compile++      : yuv_static <= convert_to_i420.cc
+[arm64-v8a] Compile++      : yuv_static <= cpu_id.cc
+[arm64-v8a] Compile++      : yuv_static <= format_conversion.cc
+[arm64-v8a] Compile++      : yuv_static <= planar_functions.cc
+[arm64-v8a] Compile++      : yuv_static <= rotate.cc
+[arm64-v8a] Compile++      : yuv_static <= rotate_argb.cc
+[arm64-v8a] Compile++      : yuv_static <= rotate_mips.cc
+[arm64-v8a] Compile++      : yuv_static <= row_any.cc
+[arm64-v8a] Compile++      : yuv_static <= row_common.cc
+[arm64-v8a] Compile++      : yuv_static <= row_mips.cc
+[arm64-v8a] Compile++      : yuv_static <= row_posix.cc
+[arm64-v8a] Compile++      : yuv_static <= scale.cc
+[arm64-v8a] Compile++      : yuv_static <= scale_argb.cc
+[arm64-v8a] Compile++      : yuv_static <= scale_common.cc
+[arm64-v8a] Compile++      : yuv_static <= scale_mips.cc
+[arm64-v8a] Compile++      : yuv_static <= scale_posix.cc
+[arm64-v8a] Compile++      : yuv_static <= video_common.cc
+[arm64-v8a] Compile++      : yuv_static <= compare_neon64.cc
+[arm64-v8a] Compile++      : yuv_static <= rotate_neon64.cc
+[arm64-v8a] Compile++      : yuv_static <= row_neon64.cc
+[arm64-v8a] Compile++      : yuv_static <= scale_neon64.cc
+[arm64-v8a] Compile        : ijkj4a <= j4a_allclasses.c
+[arm64-v8a] Compile        : ijkj4a <= j4a_base.c
+[arm64-v8a] Compile        : ijkj4a <= AudioTrack.c
+[arm64-v8a] Compile        : ijkj4a <= MediaCodec.c
+[arm64-v8a] Compile        : ijkj4a <= MediaFormat.c
+[arm64-v8a] Compile        : ijkj4a <= PlaybackParams.c
+[arm64-v8a] Compile        : ijkj4a <= Build.c
+[arm64-v8a] Compile        : ijkj4a <= Bundle.c
+[arm64-v8a] Compile        : ijkj4a <= Buffer.c
+[arm64-v8a] Compile        : ijkj4a <= ByteBuffer.c
+[arm64-v8a] Compile        : ijkj4a <= ArrayList.c
+[arm64-v8a] Compile        : ijkj4a <= IMediaDataSource.c
+[arm64-v8a] Compile        : ijkj4a <= IAndroidIO.c
+[arm64-v8a] Compile        : ijkj4a <= IjkMediaPlayer.c
+[arm64-v8a] Compile        : ijkj4a <= AudioTrack.util.c
+[arm64-v8a] Compile        : ijkj4a <= ByteBuffer.util.c
+[arm64-v8a] Compile        : android-ndk-profiler <= prof.c
+[arm64-v8a] Compile++      : ijksoundtouch <= AAFilter.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= FIFOSampleBuffer.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= FIRFilter.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= cpu_detect_x86.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= sse_optimized.cpp
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijksoundtouch/source/SoundTouch/FIRFilter.cpp: In static member function 'static soundtouch::FIRFilter* soundtouch::FIRFilter::newInstance()':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijksoundtouch/source/SoundTouch/FIRFilter.cpp:307:10: warning: variable 'uExtensions' set but not used [-Wunused-but-set-variable]
+     uint uExtensions;
+          ^
+[arm64-v8a] Compile++      : ijksoundtouch <= RateTransposer.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= InterpolateCubic.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= InterpolateLinear.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= InterpolateShannon.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= TDStretch.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= BPMDetect.cpp
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijksoundtouch/source/SoundTouch/TDStretch.cpp: In static member function 'static soundtouch::TDStretch* soundtouch::TDStretch::newInstance()':
+/home/hatch/workspace/projects/ijkplayer-build/android/ijkplayer/ijkplayer-arm64/src/main/jni/ijkmedia/ijksoundtouch/source/SoundTouch/TDStretch.cpp:745:10: warning: variable 'uExtensions' set but not used [-Wunused-but-set-variable]
+     uint uExtensions;
+          ^
+[arm64-v8a] Compile++      : ijksoundtouch <= PeakFinder.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= SoundTouch.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= mmx_optimized.cpp
+[arm64-v8a] Compile++      : ijksoundtouch <= ijksoundtouch_wrap.cpp
+[arm64-v8a] Install        : libijkffmpeg.so => libs/arm64-v8a/libijkffmpeg.so
+[arm64-v8a] StaticLibrary  : libcpufeatures.a
+[arm64-v8a] StaticLibrary  : libijkj4a.a
+[arm64-v8a] StaticLibrary  : libandroid-ndk-profiler.a
+[arm64-v8a] StaticLibrary  : libijksoundtouch.a
+[arm64-v8a] StaticLibrary  : libyuv_static.a
+[arm64-v8a] SharedLibrary  : libijksdl.so
+[arm64-v8a] SharedLibrary  : libijkplayer.so
+[arm64-v8a] Install        : libijksdl.so => libs/arm64-v8a/libijksdl.so
+[arm64-v8a] Install        : libijkplayer.so => libs/arm64-v8a/libijkplayer.so
+/home/hatch/workspace/projects/ijkplayer-build/android

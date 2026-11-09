@@ -51,6 +51,27 @@
   编出合法的 ARM aarch64 目标文件——老工具链在本 VM 上能用的最大未知数已排除。
 - 磁盘：装完后 VM 仍有约 146 GB 可用。
 
+## 基线构建结果（2026-11-09 ✅ 原版 arm64 全线跑通）
+
+构建树：`~/workspace/projects/ijkplayer-build`（从参考克隆复制，参考克隆保持干净）。
+日志：`docs/build-logs/`（init-android.log、compile-ffmpeg-arm64.log、compile-ijk-arm64.log，
+三步退出码均为 0）。
+
+- init：FFmpeg 检出在 2902e33f6e5（IJK_FFMPEG_COMMIT 的树顶），libyuv/soundtouch 就位
+- FFmpeg arm64：六个静态库齐全（libavcodec.a 27 MB 等），
+  config.h 中 HTTP/RTMP/TCP 协议均为 1（基线参照点）
+- ijk 本体：三个 .so 均为 ELF 64-bit ARM aarch64 ——
+  libijkffmpeg.so 3.58 MB、libijkplayer.so 381 KB、libijksdl.so 481 KB；
+  libijkffmpeg.so 中验到了 ff_http_protocol / ff_tcp_protocol 符号
+- 耗时参考（本 VM 共享 CPU）：init ≈9 分钟、FFmpeg ≈4.5 分钟、ijk 本体 ≈40 秒
+
+**踩到的坑（已解决，复现构建时注意）**：NDK r10e 的
+`make-standalone-toolchain.sh` 在本机把宿主误判为 linux-x86（32 位），
+首次 compile-ffmpeg 直接失败。解法：按 ijk 期望的路径
+`android/contrib/build/ffmpeg-arm64/toolchain` 手动预生成独立工具链，
+显式加 `--system=linux-x86_64`，再 `touch <toolchain>/touch`，
+ijk 脚本检测到标记文件就会跳过自己的工具链生成步骤。
+
 ## 当前 blockers
 
 - **真机**：第 4 步需要一台 arm64 安卓手机连到服务端所在的局域网，
