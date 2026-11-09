@@ -120,3 +120,24 @@ Li 给定的函数面：`kdsp_open / kdsp_read / kdsp_seek / kdsp_close` 为 URL
 
 - **真机**：第 4 步需要一台 arm64 安卓手机连到服务端所在的局域网，
   这一步只能在 Li 的环境里完成。
+
+## Demo app build (2026-11-09, verified)
+
+- Android SDK installed manually from dl.google.com zips (platform 34,
+  build-tools 34.0.0, platform-tools): on this VM sdkmanager's Java HTTP
+  stack cannot traverse the egress proxy (HttpURLConnection tunneling
+  throws NoSuchElementException), while curl can. JDK: Corretto 17.0.21.
+- Gradle 8.7 + AGP 8.5.2. The app consumes a locally built AAR
+  (player/build-ijk-aar.sh): ijkplayer-java sources compiled against
+  android.jar + the three .so from the ijkplayer build tree.
+  build-ijk-aar.sh gotcha found in testing: `strings | grep -q` under
+  `set -o pipefail` false-fails via SIGPIPE — grep the full stream.
+- Gradle dependency resolution on this VM: Java HTTP fails through the
+  proxy for every repo host, so all artifacts were pre-fetched with curl
+  into ~/opt/maven-local (file:// repo, init script
+  ~/opt/gradle-local-init.gradle) and the build ran --offline. The
+  dependency closure took ~15 fetch rounds; the one classifier artifact
+  is com.android.tools.build:aapt2:8.5.2-11315950 (linux jar).
+- Result: app-debug.apk (2,051,023 bytes), package demo.kdsp.player,
+  minSdk 21 / targetSdk 34; packaged libijkffmpeg.so verified to contain
+  ff_kdsp_protocol and the kdsp protocol name string.

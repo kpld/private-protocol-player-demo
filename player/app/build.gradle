@@ -31,7 +31,8 @@ android {
 }
 
 dependencies {
-    // Stock artifacts (no kdsp protocol). Swap for the custom build.
-    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
-    implementation 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.8'
+    // Locally built ijkplayer (java classes + arm64 .so) whose
+    // libijkffmpeg.so contains the KDSP protocol. Built by
+    // ../build-ijk-aar.sh; the stock Maven artifacts do not have kdsp.
+    implementation(name: 'ijkplayer-kdsp', ext: 'aar')
 }

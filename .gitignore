@@ -24,3 +24,8 @@ __pycache__/
 .DS_Store
 .idea/
 *.swp
+
+# locally built ijkplayer AAR (build-ijk-aar.sh) and Gradle output
+player/app/libs/
+player/.gradle/
+player/app/build/

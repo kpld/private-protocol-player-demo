@@ -1,15 +1,20 @@
 pluginManagement {
     repositories {
         google()
-        mavenCentral()
-        gradlePluginPortal()
+        // Google's full mirror of Maven Central. Used instead of
+        // mavenCentral()/gradlePluginPortal() because some build
+        // environments can only reach Google-hosted repositories.
+        maven { url = uri('https://maven-central.storage-download.googleapis.com/maven2') }
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-        mavenCentral()
+        maven { url = uri('https://maven-central.storage-download.googleapis.com/maven2') }
+        // locally built ijkplayer AAR with the KDSP protocol
+        // (see build-ijk-aar.sh); not published to any Maven repo
+        flatDir { dirs "$rootDir/app/libs" }
     }
 }
 rootProject.name = 'kdsp-player-demo'
