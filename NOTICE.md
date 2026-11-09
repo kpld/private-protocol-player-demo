@@ -17,6 +17,6 @@ Practical notes (engineering practice, not legal advice):
 - If you ship a commercial product based on this stack, review the LGPL
   obligations for your distribution model (dynamic linking, providing the
   corresponding library source, etc.) with your own counsel.
-- The KPLD protocol in `protocol.md` is fictional and original to this
+- The KDSP protocol in `protocol.md` is fictional and original to this
   repository. Any resemblance to a real vendor protocol is structural only —
   frame headers, sequence numbers and timestamps are common to the genre.

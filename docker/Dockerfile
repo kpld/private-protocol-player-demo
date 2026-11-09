@@ -6,8 +6,8 @@
 # into this file in the same commit. Do not "fix" the version by guessing.
 #
 # Intended usage (after pinning):
-#   docker build -t kpld-ijk-build docker/
-#   docker run --rm -v "$PWD":/work -w /work kpld-ijk-build \
+#   docker build -t kdsp-ijk-build docker/
+#   docker run --rm -v "$PWD":/work -w /work kdsp-ijk-build \
 #       bash player/ijkplayer-build.sh   # build script lands with step 1
 
 FROM ubuntu:22.04

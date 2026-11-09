@@ -23,7 +23,7 @@ cd ijkplayer && git checkout k0.8.8
 
 # 2. Apply this repo's protocol patch to the FFmpeg tree
 #    (paths per player/ffmpeg-patch/README.md)
-cd ../ffmpeg-arm64 && patch -p1 < ../../ffmpeg-patch/0001-libavformat-add-kpld-protocol.patch
+cd ../ffmpeg-arm64 && patch -p1 < ../../ffmpeg-patch/0001-libavformat-add-kdsp-protocol.patch
 cd ..
 
 # 3. Compile FFmpeg, then ijkplayer
@@ -50,6 +50,6 @@ cd .. && ./compile-ijk.sh arm64-v8a
 ## Verifying the build
 
 - The stock ijkplayer example (or `player/app/`) plays a local file.
-- The same app then opens `kpld://<PC-LAN-IP>:19350` against
-  `server/kpld_server.py` — that is the moment the demo exists; record a
+- The same app then opens `kdsp://<PC-LAN-IP>:19350` against
+  `server/kdsp_server.py` — that is the moment the demo exists; record a
   30-second screen capture for `docs/screenshots/` at that point.

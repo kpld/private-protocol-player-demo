@@ -12,6 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = 'kpld-player-demo'
+rootProject.name = 'kdsp-player-demo'
 include ':app'
 project(':app').projectDir = new File(rootDir, 'app')

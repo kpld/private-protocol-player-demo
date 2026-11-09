@@ -8,12 +8,12 @@ players (ExoPlayer, a vanilla ijkplayer build) cannot open them at all.
 This repository demonstrates, end to end, how such a protocol gets integrated
 into an FFmpeg-based Android player:
 
-1. a fictional proprietary protocol (**KPLD**, spec in
+1. a fictional proprietary protocol (**KDSP**, spec in
    [protocol.md](protocol.md)) — invented for this demo, resembling what real
    device vendors ship;
 2. a small server that streams it (`server/`);
 3. the player-side integration in FFmpeg's protocol layer for ijkplayer, so
-   the Android app can simply open `kpld://host:port` (`player/`);
+   the Android app can simply open `kdsp://host:port` (`player/`);
 4. a minimal Android demo app with live playback stats: first-frame time,
    estimated latency, frame rate, bitrate, dropped frames, auto-reconnect.
 
@@ -31,12 +31,12 @@ into an FFmpeg-based Android player:
 # 1. Generate the sample stream (synthetic test pattern, no copyrighted media)
 cd server && ./generate_sample.sh
 
-# 2. Start the KPLD streaming server
-python3 kpld_server.py --file sample.h264 --port 19350
-#    weak-network demo:  python3 kpld_server.py --drop 0.05 --jitter 40
+# 2. Start the KDSP streaming server
+python3 kdsp_server.py --file sample.h264 --port 19350
+#    weak-network demo:  python3 kdsp_server.py --drop 0.05 --jitter 40
 
 # 3. Build & install the Android demo app (see player/ijkplayer-build.md),
-#    then enter:  kpld://<your-PC-LAN-IP>:19350
+#    then enter:  kdsp://<your-PC-LAN-IP>:19350
 ```
 
 ## What this proves
@@ -56,7 +56,7 @@ python3 kpld_server.py --file sample.h264 --port 19350
 ## Repository layout
 
 ```
-protocol.md            KPLD protocol specification (fictional)
+protocol.md            KDSP protocol specification (fictional)
 server/                streaming server + sample generator (Python, tested)
 player/ffmpeg-patch/   where the FFmpeg protocol code goes, and why there
 player/app/            Android demo app (skeleton)

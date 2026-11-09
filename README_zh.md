@@ -6,11 +6,11 @@ RTSP：带私有帧头、私有时间戳、甚至私有传输方式。现成播�
 
 这个仓库完整演示一遍这类协议如何接进基于 FFmpeg 的安卓播放器：
 
-1. 一个虚构的私有协议 **KPLD**（规范见 [protocol.md](protocol.md)，为本
+1. 一个虚构的私有协议 **KDSP**（规范见 [protocol.md](protocol.md)，为本
    Demo 发明，形态仿真实设备厂商协议）；
 2. 一个推这个协议的测试流服务端（`server/`）；
 3. 在 FFmpeg 协议层为 ijkplayer 做的播放器侧接入，使安卓 App 可以直接
-   打开 `kpld://主机:端口`（`player/`）；
+   打开 `kdsp://主机:端口`（`player/`）；
 4. 一个极简安卓 Demo App，带实时统计：首帧耗时、估算延迟、帧率、码率、
    丢帧数、自动重连。
 
@@ -23,9 +23,9 @@ RTSP：带私有帧头、私有时间戳、甚至私有传输方式。现成播�
 
 ```bash
 cd server && ./generate_sample.sh           # 生成合成测试码流（无版权素材）
-python3 kpld_server.py --file sample.h264 --port 19350
-# 弱网模拟： python3 kpld_server.py --drop 0.05 --jitter 40
-# 然后按 player/ijkplayer-build.md 构建安卓 App，输入 kpld://<PC 局域网 IP>:19350
+python3 kdsp_server.py --file sample.h264 --port 19350
+# 弱网模拟： python3 kdsp_server.py --drop 0.05 --jitter 40
+# 然后按 player/ijkplayer-build.md 构建安卓 App，输入 kdsp://<PC 局域网 IP>:19350
 ```
 
 ## 许可

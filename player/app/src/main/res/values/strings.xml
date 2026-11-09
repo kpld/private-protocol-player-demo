@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">KPLD Player Demo</string>
-    <string name="hint_url">kpld://192.168.1.10:19350</string>
+    <string name="app_name">KDSP Player Demo</string>
+    <string name="hint_url">kdsp://192.168.1.10:19350</string>
     <string name="play">Play</string>
     <string name="stop">Stop</string>
     <string name="stats_initial">idle</string>

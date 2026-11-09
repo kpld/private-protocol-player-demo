@@ -1,17 +1,17 @@
 // Demo app module. Skeleton: compiles against the stock ijkplayer 0.8.8
-// artifacts; for the KPLD demo, replace them with the locally built
+// artifacts; for the KDSP demo, replace them with the locally built
 // ijkplayer from player/ijkplayer-build.md (flatDir/AAR), which contains
-// the kpld protocol.
+// the kdsp protocol.
 plugins {
     id 'com.android.application'
 }
 
 android {
-    namespace 'demo.kpld.player'
+    namespace 'demo.kdsp.player'
     compileSdk 34
 
     defaultConfig {
-        applicationId 'demo.kpld.player'
+        applicationId 'demo.kdsp.player'
         minSdk 21
         targetSdk 34
         versionCode 1
@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    // Stock artifacts (no kpld protocol). Swap for the custom build.
+    // Stock artifacts (no kdsp protocol). Swap for the custom build.
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     implementation 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.8'
 }

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""KPLD demo streaming server.
+"""KDSP demo streaming server.
 
 Reads a raw H.264 elementary stream (with AUD NAL units, see
-generate_sample.sh), packetises it into KPLD frames (see ../protocol.md)
+generate_sample.sh), packetises it into KDSP frames (see ../protocol.md)
 and streams it over TCP, paced at the stream's frame rate, looping forever.
 
 Weak-network simulation:
@@ -11,7 +11,7 @@ Weak-network simulation:
   --delay 200    add a fixed 200 ms delay before each frame
 
 Usage:
-  python3 kpld_server.py --file sample.h264 --port 19350
+  python3 kdsp_server.py --file sample.h264 --port 19350
 """
 import argparse
 import random
@@ -20,7 +20,7 @@ import struct
 import sys
 import time
 
-MAGIC = 0x4B504C44  # "KPLD"
+MAGIC = 0x4B445350  # "KDSP"
 VERSION = 0x01
 HEADER = struct.Struct("<IBBIQI")  # magic, version, flags, sequence, timestamp_ms, payload_length
 FLAG_KEYFRAME = 0x01
@@ -105,7 +105,7 @@ def serve_client(conn, aus, args, rng):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="KPLD demo streaming server")
+    ap = argparse.ArgumentParser(description="KDSP demo streaming server")
     ap.add_argument("--file", default="sample.h264", help="raw H.264 elementary stream with AUDs")
     ap.add_argument("--port", type=int, default=19350)
     ap.add_argument("--fps", type=float, default=25.0, help="send pacing (match the sample's frame rate)")
@@ -124,7 +124,7 @@ def main():
     srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     srv.bind(("0.0.0.0", args.port))
     srv.listen(1)
-    print(f"[server] listening on 0.0.0.0:{args.port} (kpld://<this-host>:{args.port})", flush=True)
+    print(f"[server] listening on 0.0.0.0:{args.port} (kdsp://<this-host>:{args.port})", flush=True)
     try:
         while True:
             conn, addr = srv.accept()

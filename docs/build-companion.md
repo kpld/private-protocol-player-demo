@@ -14,19 +14,19 @@
    各架构副本放在 `android/contrib/ffmpeg-<arch>`（我们要的是 `ffmpeg-arm64`）。
    **patch 要打在 `android/contrib/ffmpeg-arm64` 这份上**（或 base 后重新 pull）。
 3. **新协议的注册方式（这棵 FFmpeg 3.4 树已核实）**：
-   - `libavformat/protocols.c`：加一行 `extern const URLProtocol ff_kpld_protocol;`
+   - `libavformat/protocols.c`：加一行 `extern const URLProtocol ff_kdsp_protocol;`
      —— configure 用 `find_things_extern` 从这个文件自动生成协议列表，
      **不需要改 configure 的任何列表**；
-   - `libavformat/Makefile`：加 `OBJS-$(CONFIG_KPLD_PROTOCOL) += kpld.o`
+   - `libavformat/Makefile`：加 `OBJS-$(CONFIG_KDSP_PROTOCOL) += kdsp.o`
      （参照同文件 `OBJS-$(CONFIG_TCP_PROTOCOL) += tcp.o`）；
-   - `libavformat/kpld.c`：新文件，实现 `ff_kpld_protocol`
+   - `libavformat/kdsp.c`：新文件，实现 `ff_kdsp_protocol`
      （最小参照：同目录 `data_uri.c` 的 `ff_data_protocol` 结构；
      网络参照：`tcp.c`）；
    - 协议列表 `protocol_list.c` 由 configure 生成，不用手改。
 4. **默认启用的**：`init-config.sh` 默认用 `config/module-lite.sh`，其中是
    `--enable-protocols`（全开）再逐个 `--disable-protocol=` 关掉不要的。
-   所以 kpld 协议**默认就会被编译进去**，除非被显式 disable；构建后用
-   `grep CONFIG_KPLD_PROTOCOL android/contrib/build/ffmpeg-arm64/*/config.h`
+   所以 kdsp 协议**默认就会被编译进去**，除非被显式 disable；构建后用
+   `grep CONFIG_KDSP_PROTOCOL android/contrib/build/ffmpeg-arm64/*/config.h`
    （路径以实际产物为准）验证为 1。
 5. **另一个现成参照**：ijkplayer 本体在 `ijkmedia/ijkplayer/ijkavformat/`
    里自带一套自定义 IO 协议（`ijkioprotocol.c` 等）。如果 FFmpeg 层接入
@@ -38,9 +38,9 @@
 | 步 | 谁 | 做什么 | 完成标志 |
 |---|---|---|---|
 | 1 | Muse | 在 Docker/VM 里备好 NDK r10e + 源码树，跑通**原版无 patch** 的 arm64 构建 | 产出原版 libijkffmpeg.so / ijkplayer .so，构建日志存 `docs/` |
-| 2 | Li | 写 `libavformat/kpld.c`（按 protocol.md 的接收规则；可先在本机 PC 用这棵 FFmpeg 的 ffplay 目标自测逻辑） | kpld.c 提交到本仓库 `player/ffmpeg-patch/` |
-| 3 | Muse | 按上面第 3 点把 kpld.c 集成进 ffmpeg-arm64 树、生成 patch 文件、重新构建 | config.h 里 CONFIG_KPLD_PROTOCOL=1 且构建通过 |
-| 4 | 一起 | 安卓 App 连 `kpld://` 打服务端流，排错（whitelist、demuxer 探测、硬解开关） | 手机上播出画面 + 录屏存 `docs/screenshots/` |
+| 2 | Li | 写 `libavformat/kdsp.c`（按 protocol.md 的接收规则；可先在本机 PC 用这棵 FFmpeg 的 ffplay 目标自测逻辑） | kdsp.c 提交到本仓库 `player/ffmpeg-patch/` |
+| 3 | Muse | 按上面第 3 点把 kdsp.c 集成进 ffmpeg-arm64 树、生成 patch 文件、重新构建 | config.h 里 CONFIG_KDSP_PROTOCOL=1 且构建通过 |
+| 4 | 一起 | 安卓 App 连 `kdsp://` 打服务端流，排错（whitelist、demuxer 探测、硬解开关） | 手机上播出画面 + 录屏存 `docs/screenshots/` |
 | 5 | Muse | 更新 README 实测数据、延迟测试表、发布前检查 | 仓库达到可公开状态，等 Li 定 GitHub 账号后推送 |
 
 ## 当前 blockers（开工前要定的）

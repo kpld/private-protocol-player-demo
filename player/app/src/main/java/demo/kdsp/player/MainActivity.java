@@ -1,4 +1,4 @@
-package demo.kpld.player;
+package demo.kdsp.player;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,13 +18,13 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
- * Minimal KPLD demo player.
+ * Minimal KDSP demo player.
  *
  * Skeleton scope: playback via ijkplayer, first-frame timing, elapsed time,
  * video size, reconnect counting, and a stats overlay. The dropped-frame /
- * bitrate counters that come from the KPLD protocol layer are wired as TODOs
+ * bitrate counters that come from the KDSP protocol layer are wired as TODOs
  * below — they become available once the custom ijkplayer build with the
- * kpld protocol (player/ffmpeg-patch/) is used instead of the stock 0.8.8
+ * kdsp protocol (player/ffmpeg-patch/) is used instead of the stock 0.8.8
  * artifacts.
  *
  * NOTE: not yet compiled — this machine has no Android SDK/JDK. First build
@@ -78,7 +78,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         // Live-stream tuning used by the demo: low probing, reconnect on.
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "reconnect", 1);
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "protocol_whitelist",
-                "kpld,crypto,file,http,https,tcp,tls,udp");
+                "kdsp,crypto,file,http,https,tcp,tls,udp");
         player.setDisplay(holder);
         player.setOnInfoListener((mp, what, extra) -> {
             if (what == IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START && firstFrameMs < 0) {
@@ -130,12 +130,12 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         long elapsed = playing ? (SystemClock.elapsedRealtime() - playStartElapsed) / 1000 : 0;
         String first = firstFrameMs >= 0 ? (firstFrameMs + " ms") : "—";
         String size = videoWidth > 0 ? (videoWidth + "x" + videoHeight) : "—";
-        // TODO(kpld protocol): dropped frames / jitter / bitrate counters from
+        // TODO(kdsp protocol): dropped frames / jitter / bitrate counters from
         // the protocol layer, once the custom build is in use. Placeholder
         // values are shown as n/a on purpose — never fake stats in a demo
         // whose whole point is credibility.
         statsView.setText(String.format(Locale.US,
-                "state: %s\nfirst frame: %s\nelapsed: %ds\nvideo: %s\nreconnects: %d\ndropped frames: n/a (needs kpld build)\nbitrate: n/a (needs kpld build)",
+                "state: %s\nfirst frame: %s\nelapsed: %ds\nvideo: %s\nreconnects: %d\ndropped frames: n/a (needs kdsp build)\nbitrate: n/a (needs kdsp build)",
                 playing ? "playing" : "idle", first, elapsed, size, reconnectCount));
     }
 

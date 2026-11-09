@@ -1,6 +1,6 @@
-# KPLD Protocol — Specification v1 (fictional, for demo purposes)
+# KDSP — Device Streaming Protocol, Specification v1 (fictional, for demo purposes)
 
-KPLD is a **fictional** proprietary-style streaming protocol invented for this
+**KDSP (Device Streaming Protocol)** is a **fictional** proprietary-style streaming protocol invented for this
 demo repository. It does not correspond to any real vendor protocol. Its only
 job is to be simple, realistic, and impossible for a stock player to open —
 so the FFmpeg/ijkplayer integration work is genuinely necessary.
@@ -19,7 +19,7 @@ Every frame is a fixed 22-byte little-endian header followed by the payload.
 
 | Offset | Field          | Size | Description                                        |
 |-------:|----------------|-----:|----------------------------------------------------|
-| 0      | magic          | 4 B  | `0x4B504C44` — ASCII `KPLD`. Used for resync.      |
+| 0      | magic          | 4 B  | `0x4B445350` — ASCII `KDSP`. Used for resync.      |
 | 4      | version        | 1 B  | `0x01`                                             |
 | 5      | flags          | 1 B  | bit0: keyframe. Other bits reserved, must be 0.    |
 | 6      | sequence       | 4 B  | uint32 LE, increments by 1 per frame, wraps.       |
@@ -30,7 +30,7 @@ Every frame is a fixed 22-byte little-endian header followed by the payload.
 ## Receiver rules (what the player-side protocol code must do)
 
 1. Read exactly 22 header bytes; if `magic` does not match, scan forward one
-   byte at a time until the next `KPLD` magic is found (resynchronisation
+   byte at a time until the next `KDSP` magic is found (resynchronisation
    after corruption or a mid-stream join).
 2. Read exactly `payload_length` payload bytes. Sanity limit: 8 MiB; a larger
    declared length means the stream is desynchronised — resync instead of
@@ -46,8 +46,8 @@ Every frame is a fixed 22-byte little-endian header followed by the payload.
 
 ## Server behaviour
 
-- `server/kpld_server.py` packetises a raw H.264 elementary stream file
-  (`sample.h264`, see `server/generate_sample.sh`) into KPLD frames and sends
+- `server/kdsp_server.py` packetises a raw H.264 elementary stream file
+  (`sample.h264`, see `server/generate_sample.sh`) into KDSP frames and sends
   them paced at the stream's frame rate, looping forever.
 - Weak-network simulation flags (server side): `--drop 0.05` drops 5% of
   frames, `--jitter 40` adds ±40 ms send jitter, `--delay 200` adds a fixed

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""KPLD protocol verification client (development tool).
+"""KDSP protocol verification client (development tool).
 
-Connects to a running kpld_server, parses frames exactly the way the
+Connects to a running kdsp_server, parses frames exactly the way the
 player-side protocol code must (see protocol.md "Receiver rules") and
 reports: header sanity, sequence monotonicity, keyframe cadence, payload
 start codes, and sender->receiver timestamp delta. Exits non-zero on the
@@ -15,7 +15,7 @@ import struct
 import sys
 import time
 
-MAGIC = 0x4B504C44
+MAGIC = 0x4B445350
 HEADER = struct.Struct("<IBBIQI")
 
 
