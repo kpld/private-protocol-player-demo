@@ -1,0 +1,591 @@
+====================
+[*] check archs
+====================
+FF_ALL_ARCHS = armv5 armv7a arm64 x86 x86_64
+FF_ACT_ARCHS = arm64
+
+====================
+[*] check env arm64
+====================
+FF_ARCH=arm64
+FF_BUILD_OPT=
+
+--------------------
+[*] make NDK standalone toolchain
+--------------------
+build on Linux x86_64
+ANDROID_NDK=/home/hatch/opt/android-ndk-r10e
+NDKr10e-rc4(64-bit) detected
+
+--------------------
+[*] check ffmpeg env
+--------------------
+
+--------------------
+[*] configurate ffmpeg
+--------------------
+/home/hatch/workspace/projects/ijkplayer-build/android/contrib/build/ffmpeg-arm64/toolchain/bin//aarch64-linux-android-gcc
+install prefix            /home/hatch/workspace/projects/ijkplayer-build/android/contrib/build/ffmpeg-arm64/output
+source path               .
+C compiler                aarch64-linux-android-gcc
+C library                 bionic
+host C compiler           gcc
+host C library            glibc
+ARCH                      aarch64 (generic)
+big-endian                no
+runtime cpu detection     yes
+NEON enabled              yes
+VFP enabled               yes
+debug symbols             yes
+strip symbols             yes
+optimize for size         yes
+optimizations             yes
+static                    yes
+shared                    no
+postprocessing support    no
+network support           yes
+threading support         pthreads
+safe bitstream reader     yes
+texi2html enabled         no
+perl enabled              yes
+pod2man enabled           yes
+makeinfo enabled          no
+makeinfo supports HTML    no
+
+External libraries:
+xlib			zlib
+
+External libraries providing hardware acceleration:
+
+Libraries:
+avcodec			avformat		swresample
+avfilter		avutil			swscale
+
+Programs:
+
+Enabled decoders:
+aac			hevc			mp3on4float
+aac_latm		mp3			vp6
+flac			mp3adu			vp6f
+flv			mp3adufloat		vp8
+h263			mp3float		vp9
+h264			mp3on4
+
+Enabled encoders:
+png
+
+Enabled hwaccels:
+
+Enabled parsers:
+aac			h263			mpegaudio
+aac_latm		h264			vp9
+flac			hevc
+
+Enabled demuxers:
+aac			hevc			mp3
+concat			hls			mpegps
+data			live_flv		mpegts
+flac			matroska		mpegvideo
+flv			mov			webm_dash_manifest
+
+Enabled muxers:
+mov			mp4
+
+Enabled protocols:
+async			httpproxy		pipe
+cache			ijkhttphook		prompeg
+data			ijkio			rtmp
+ffrtmphttp		ijklongurl		rtmpt
+file			ijkmediadatasource	tcp
+ftp			ijksegment		tee
+hls			ijktcphook		udp
+http			kdsp			udplite
+
+Enabled filters:
+
+Enabled bsfs:
+aac_adtstoasc		h264_mp4toannexb	vp9_raw_reorder
+extract_extradata	null			vp9_superframe_split
+
+Enabled indevs:
+
+Enabled outdevs:
+
+License: LGPL version 2.1 or later
+Creating configuration files ...
+libavutil/avconfig.h is unchanged
+libavcodec/bsf_list.c is unchanged
+
+WARNING: The --enable-yasm option is only provided for compatibility and will be
+ removed in the future. Use --enable-x86asm / --disable-x86asm instead.
+WARNING: aarch64-linux-android-pkg-config not found, library detection may fail.
+
+--------------------
+[*] compile ffmpeg
+--------------------
+libavfilter/avfiltergraph.c: In function 'avfilter_graph_free':
+libavfilter/avfiltergraph.c:132:5: warning: 'resample_lavr_opts' is deprecated (declared at libavfilter/avfilter.h:862) [-Wdeprecated-declarations]
+     av_freep(&(*graph)->resample_lavr_opts);
+     ^
+libavformat/dump.c: In function 'dump_stream_format':
+libavformat/dump.c:473:5: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+     avctx->properties = st->codec->properties;
+     ^
+libavformat/dump.c:474:5: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+     avctx->codec      = st->codec->codec;
+     ^
+libavformat/dump.c:475:5: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+     avctx->qmin       = st->codec->qmin;
+     ^
+libavformat/dump.c:476:5: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+     avctx->qmax       = st->codec->qmax;
+     ^
+libavformat/dump.c:477:5: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+     avctx->coded_width  = st->codec->coded_width;
+     ^
+libavformat/dump.c:478:5: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+     avctx->coded_height = st->codec->coded_height;
+     ^
+libavformat/dump.c:513:9: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+         int tbc = st->codec->time_base.den && st->codec->time_base.num;
+         ^
+libavformat/dump.c:513:9: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+libavformat/dump.c:525:13: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+             print_fps(1 / av_q2d(st->codec->time_base), "tbc");
+             ^
+libavformat/movenc.c: In function 'ff_mov_write_packet':
+libavformat/movenc.c:5279:1: warning: label 'end' defined but not used [-Wunused-label]
+ end:
+ ^
+libavformat/protocols.c: In function 'avio_enum_protocols':
+libavformat/protocols.c:107:7: warning: assignment discards 'const' qualifier from pointer target type
+     p = p ? p + 1 : url_protocols;
+       ^
+libavformat/tcp.c: In function 'tcp_getaddrinfo_request_free_buffer':
+libavformat/tcp.c:134:5: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+     TCPAddrinfoRequest *req = (TCPAddrinfoRequest *)opaque;
+     ^
+libavformat/utils.c: In function 'avformat_transfer_internal_stream_timing_info':
+libavformat/utils.c:5563:5: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+     const AVCodecContext *dec_ctx = ist->codec;
+     ^
+libavformat/utils.c:5564:5: warning: 'codec' is deprecated (declared at libavformat/avformat.h:898) [-Wdeprecated-declarations]
+     AVCodecContext       *enc_ctx = ost->codec;
+     ^
+libavcodec/aarch64/h264dsp_init_aarch64.c: In function 'ff_h264dsp_init_aarch64':
+libavcodec/aarch64/h264dsp_init_aarch64.c:84:38: warning: assignment from incompatible pointer type
+         c->weight_h264_pixels_tab[0] = ff_weight_h264_pixels_16_neon;
+                                      ^
+libavcodec/aarch64/h264dsp_init_aarch64.c:85:38: warning: assignment from incompatible pointer type
+         c->weight_h264_pixels_tab[1] = ff_weight_h264_pixels_8_neon;
+                                      ^
+libavcodec/aarch64/h264dsp_init_aarch64.c:86:38: warning: assignment from incompatible pointer type
+         c->weight_h264_pixels_tab[2] = ff_weight_h264_pixels_4_neon;
+                                      ^
+libavcodec/aarch64/h264dsp_init_aarch64.c:88:40: warning: assignment from incompatible pointer type
+         c->biweight_h264_pixels_tab[0] = ff_biweight_h264_pixels_16_neon;
+                                        ^
+libavcodec/aarch64/h264dsp_init_aarch64.c:89:40: warning: assignment from incompatible pointer type
+         c->biweight_h264_pixels_tab[1] = ff_biweight_h264_pixels_8_neon;
+                                        ^
+libavcodec/aarch64/h264dsp_init_aarch64.c:90:40: warning: assignment from incompatible pointer type
+         c->biweight_h264_pixels_tab[2] = ff_biweight_h264_pixels_4_neon;
+                                        ^
+libavcodec/bitstream_filter.c: In function 'av_bitstream_filter_next':
+libavcodec/bitstream_filter.c:39:5: warning: return discards 'const' qualifier from pointer target type
+     return av_bsf_next(&opaque);
+     ^
+libavcodec/bitstream_filter.c: In function 'av_bitstream_filter_filter':
+libavcodec/bitstream_filter.c:134:14: warning: assignment discards 'const' qualifier from pointer target type
+     pkt.data = buf;
+              ^
+libavcodec/decode.c: In function 'compat_decode':
+libavcodec/decode.c:789:13: warning: 'refcounted_frames' is deprecated (declared at libavcodec/avcodec.h:2695) [-Wdeprecated-declarations]
+             if (!avctx->refcounted_frames) {
+             ^
+libavcodec/decode.c: In function 'avcodec_flush_buffers':
+libavcodec/decode.c:1743:5: warning: 'refcounted_frames' is deprecated (declared at libavcodec/avcodec.h:2695) [-Wdeprecated-declarations]
+     if (!avctx->refcounted_frames)
+     ^
+libavcodec/encode.c: In function 'do_encode':
+libavcodec/encode.c:378:9: warning: 'avcodec_encode_video2' is deprecated (declared at libavcodec/encode.c:267) [-Wdeprecated-declarations]
+         ret = avcodec_encode_video2(avctx, avctx->internal->buffer_pkt,
+         ^
+libavcodec/encode.c:381:9: warning: 'avcodec_encode_audio2' is deprecated (declared at libavcodec/encode.c:118) [-Wdeprecated-declarations]
+         ret = avcodec_encode_audio2(avctx, avctx->internal->buffer_pkt,
+         ^
+In file included from libavcodec/fft_fixed.c:21:0:
+libavcodec/fft_template.c:528:6: warning: 'pass_big' defined but not used [-Wunused-function]
+ PASS(pass_big)
+      ^
+libavcodec/fft_template.c:505:13: note: in definition of macro 'PASS'
+ static void name(FFTComplex *z, const FFTSample *wre, unsigned int n)\
+             ^
+In file included from libavcodec/fft_float.c:21:0:
+libavcodec/fft_template.c:528:6: warning: 'pass_big' defined but not used [-Wunused-function]
+ PASS(pass_big)
+      ^
+libavcodec/fft_template.c:505:13: note: in definition of macro 'PASS'
+ static void name(FFTComplex *z, const FFTSample *wre, unsigned int n)\
+             ^
+libavcodec/frame_thread_encoder.c: In function 'worker':
+libavcodec/frame_thread_encoder.c:89:9: warning: 'avcodec_encode_video2' is deprecated (declared at libavcodec/avcodec.h:5509) [-Wdeprecated-declarations]
+         ret = avcodec_encode_video2(avctx, pkt, frame, &got_packet);
+         ^
+libavcodec/frame_thread_encoder.c:95:13: warning: 'av_dup_packet' is deprecated (declared at libavcodec/avcodec.h:4622) [-Wdeprecated-declarations]
+             int ret2 = av_dup_packet(pkt);
+             ^
+libavcodec/mpegvideo.c: In function 'ff_mpv_common_init':
+libavcodec/mpegvideo.c:918:5: warning: 'avcodec_get_chroma_sub_sample' is deprecated (declared at libavcodec/avcodec.h:5704) [-Wdeprecated-declarations]
+     avcodec_get_chroma_sub_sample(s->avctx->pix_fmt,
+     ^
+libavcodec/mpegvideo.c: In function 'ff_print_debug_info2':
+libavcodec/mpegvideo.c:1761:9: warning: 'avcodec_get_chroma_sub_sample' is deprecated (declared at libavcodec/avcodec.h:5704) [-Wdeprecated-declarations]
+         avcodec_get_chroma_sub_sample(avctx->pix_fmt, &h_chroma_shift, &v_chroma_shift);
+         ^
+libavcodec/pngenc.c: In function 'png_write_row':
+libavcodec/pngenc.c:277:25: warning: assignment discards 'const' qualifier from pointer target type
+     s->zstream.next_in  = data;
+                         ^
+libswscale/output.c:1273:21: warning: 'yuv2rgba64be_X_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, rgba64be, AV_PIX_FMT_RGBA64BE, 1, 1)
+                     ^
+libswscale/output.c:1224:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _X_c(SwsContext *c, const int16_t *lumFilter, \
+             ^
+libswscale/output.c:1273:21: warning: 'yuv2rgba64be_2_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, rgba64be, AV_PIX_FMT_RGBA64BE, 1, 1)
+                     ^
+libswscale/output.c:1241:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _2_c(SwsContext *c, const int16_t *_buf[2], \
+             ^
+libswscale/output.c:1273:21: warning: 'yuv2rgba64be_1_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, rgba64be, AV_PIX_FMT_RGBA64BE, 1, 1)
+                     ^
+libswscale/output.c:1255:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _1_c(SwsContext *c, const int16_t *_buf0, \
+             ^
+libswscale/output.c:1274:21: warning: 'yuv2rgba64le_X_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, rgba64le, AV_PIX_FMT_RGBA64LE, 1, 1)
+                     ^
+libswscale/output.c:1224:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _X_c(SwsContext *c, const int16_t *lumFilter, \
+             ^
+libswscale/output.c:1274:21: warning: 'yuv2rgba64le_2_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, rgba64le, AV_PIX_FMT_RGBA64LE, 1, 1)
+                     ^
+libswscale/output.c:1241:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _2_c(SwsContext *c, const int16_t *_buf[2], \
+             ^
+libswscale/output.c:1274:21: warning: 'yuv2rgba64le_1_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, rgba64le, AV_PIX_FMT_RGBA64LE, 1, 1)
+                     ^
+libswscale/output.c:1255:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _1_c(SwsContext *c, const int16_t *_buf0, \
+             ^
+libswscale/output.c:1277:21: warning: 'yuv2bgra64be_X_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, bgra64be, AV_PIX_FMT_BGRA64BE, 1, 1)
+                     ^
+libswscale/output.c:1224:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _X_c(SwsContext *c, const int16_t *lumFilter, \
+             ^
+libswscale/output.c:1277:21: warning: 'yuv2bgra64be_2_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, bgra64be, AV_PIX_FMT_BGRA64BE, 1, 1)
+                     ^
+libswscale/output.c:1241:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _2_c(SwsContext *c, const int16_t *_buf[2], \
+             ^
+libswscale/output.c:1277:21: warning: 'yuv2bgra64be_1_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, bgra64be, AV_PIX_FMT_BGRA64BE, 1, 1)
+                     ^
+libswscale/output.c:1255:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _1_c(SwsContext *c, const int16_t *_buf0, \
+             ^
+libswscale/output.c:1278:21: warning: 'yuv2bgra64le_X_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, bgra64le, AV_PIX_FMT_BGRA64LE, 1, 1)
+                     ^
+libswscale/output.c:1224:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _X_c(SwsContext *c, const int16_t *lumFilter, \
+             ^
+libswscale/output.c:1278:21: warning: 'yuv2bgra64le_2_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, bgra64le, AV_PIX_FMT_BGRA64LE, 1, 1)
+                     ^
+libswscale/output.c:1241:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _2_c(SwsContext *c, const int16_t *_buf[2], \
+             ^
+libswscale/output.c:1278:21: warning: 'yuv2bgra64le_1_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64, bgra64le, AV_PIX_FMT_BGRA64LE, 1, 1)
+                     ^
+libswscale/output.c:1255:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _1_c(SwsContext *c, const int16_t *_buf0, \
+             ^
+libswscale/output.c:1286:21: warning: 'yuv2rgba64be_full_X_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, rgba64be_full, AV_PIX_FMT_RGBA64BE, 1, 1)
+                     ^
+libswscale/output.c:1224:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _X_c(SwsContext *c, const int16_t *lumFilter, \
+             ^
+libswscale/output.c:1286:21: warning: 'yuv2rgba64be_full_2_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, rgba64be_full, AV_PIX_FMT_RGBA64BE, 1, 1)
+                     ^
+libswscale/output.c:1241:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _2_c(SwsContext *c, const int16_t *_buf[2], \
+             ^
+libswscale/output.c:1286:21: warning: 'yuv2rgba64be_full_1_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, rgba64be_full, AV_PIX_FMT_RGBA64BE, 1, 1)
+                     ^
+libswscale/output.c:1255:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _1_c(SwsContext *c, const int16_t *_buf0, \
+             ^
+libswscale/output.c:1287:21: warning: 'yuv2rgba64le_full_X_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, rgba64le_full, AV_PIX_FMT_RGBA64LE, 1, 1)
+                     ^
+libswscale/output.c:1224:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _X_c(SwsContext *c, const int16_t *lumFilter, \
+             ^
+libswscale/output.c:1287:21: warning: 'yuv2rgba64le_full_2_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, rgba64le_full, AV_PIX_FMT_RGBA64LE, 1, 1)
+                     ^
+libswscale/output.c:1241:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _2_c(SwsContext *c, const int16_t *_buf[2], \
+             ^
+libswscale/output.c:1287:21: warning: 'yuv2rgba64le_full_1_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, rgba64le_full, AV_PIX_FMT_RGBA64LE, 1, 1)
+                     ^
+libswscale/output.c:1255:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _1_c(SwsContext *c, const int16_t *_buf0, \
+             ^
+libswscale/output.c:1290:21: warning: 'yuv2bgra64be_full_X_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, bgra64be_full, AV_PIX_FMT_BGRA64BE, 1, 1)
+                     ^
+libswscale/output.c:1224:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _X_c(SwsContext *c, const int16_t *lumFilter, \
+             ^
+libswscale/output.c:1290:21: warning: 'yuv2bgra64be_full_2_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, bgra64be_full, AV_PIX_FMT_BGRA64BE, 1, 1)
+                     ^
+libswscale/output.c:1241:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _2_c(SwsContext *c, const int16_t *_buf[2], \
+             ^
+libswscale/output.c:1290:21: warning: 'yuv2bgra64be_full_1_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, bgra64be_full, AV_PIX_FMT_BGRA64BE, 1, 1)
+                     ^
+libswscale/output.c:1255:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _1_c(SwsContext *c, const int16_t *_buf0, \
+             ^
+libswscale/output.c:1291:21: warning: 'yuv2bgra64le_full_X_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, bgra64le_full, AV_PIX_FMT_BGRA64LE, 1, 1)
+                     ^
+libswscale/output.c:1224:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _X_c(SwsContext *c, const int16_t *lumFilter, \
+             ^
+libswscale/output.c:1291:21: warning: 'yuv2bgra64le_full_2_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, bgra64le_full, AV_PIX_FMT_BGRA64LE, 1, 1)
+                     ^
+libswscale/output.c:1241:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _2_c(SwsContext *c, const int16_t *_buf[2], \
+             ^
+libswscale/output.c:1291:21: warning: 'yuv2bgra64le_full_1_c' defined but not used [-Wunused-function]
+ YUV2PACKED16WRAPPER(yuv2, rgba64_full, bgra64le_full, AV_PIX_FMT_BGRA64LE, 1, 1)
+                     ^
+libswscale/output.c:1255:13: note: in definition of macro 'YUV2PACKED16WRAPPER'
+ static void name ## ext ## _1_c(SwsContext *c, const int16_t *_buf0, \
+             ^
+INSTALL	doc/examples/avio_dir_cmd.c
+INSTALL	doc/examples/avio_reading.c
+INSTALL	doc/examples/decode_audio.c
+INSTALL	doc/examples/decode_video.c
+INSTALL	doc/examples/demuxing_decoding.c
+INSTALL	doc/examples/encode_audio.c
+INSTALL	doc/examples/encode_video.c
+INSTALL	doc/examples/extract_mvs.c
+INSTALL	doc/examples/filter_audio.c
+INSTALL	doc/examples/filtering_audio.c
+INSTALL	doc/examples/filtering_video.c
+INSTALL	doc/examples/http_multiclient.c
+INSTALL	doc/examples/hw_decode.c
+INSTALL	doc/examples/metadata.c
+INSTALL	doc/examples/muxing.c
+INSTALL	doc/examples/qsvdec.c
+INSTALL	doc/examples/remuxing.c
+INSTALL	doc/examples/resampling_audio.c
+INSTALL	doc/examples/scaling_video.c
+INSTALL	doc/examples/transcode_aac.c
+INSTALL	doc/examples/transcoding.c
+INSTALL	doc/examples/README
+INSTALL	doc/examples/Makefile
+INSTALL	doc/examples/avio_dir_cmd.c
+INSTALL	doc/examples/avio_reading.c
+INSTALL	doc/examples/decode_audio.c
+INSTALL	doc/examples/decode_video.c
+INSTALL	doc/examples/demuxing_decoding.c
+INSTALL	doc/examples/encode_audio.c
+INSTALL	doc/examples/encode_video.c
+INSTALL	doc/examples/extract_mvs.c
+INSTALL	doc/examples/filter_audio.c
+INSTALL	doc/examples/filtering_audio.c
+INSTALL	doc/examples/filtering_video.c
+INSTALL	doc/examples/http_multiclient.c
+INSTALL	doc/examples/hw_decode.c
+INSTALL	doc/examples/metadata.c
+INSTALL	doc/examples/muxing.c
+INSTALL	doc/examples/qsvdec.c
+INSTALL	doc/examples/remuxing.c
+INSTALL	doc/examples/resampling_audio.c
+INSTALL	doc/examples/scaling_video.c
+INSTALL	doc/examples/transcode_aac.c
+INSTALL	doc/examples/transcoding.c
+INSTALL	doc/examples/README
+INSTALL	doc/examples/Makefile
+INSTALL	libavfilter/libavfilter.a
+INSTALL	libavformat/libavformat.a
+INSTALL	libavcodec/libavcodec.a
+INSTALL	libswresample/libswresample.a
+INSTALL	libswscale/libswscale.a
+INSTALL	libavutil/libavutil.a
+INSTALL	libavfilter/avfilter.h
+INSTALL	libavfilter/avfiltergraph.h
+INSTALL	libavfilter/buffersink.h
+INSTALL	libavfilter/buffersrc.h
+INSTALL	libavfilter/version.h
+INSTALL	libavfilter/libavfilter.pc
+INSTALL	libavformat/avformat.h
+INSTALL	libavformat/avio.h
+INSTALL	libavformat/version.h
+INSTALL	libavformat/avc.h
+INSTALL	libavformat/url.h
+INSTALL	libavformat/internal.h
+INSTALL	libavformat/libavformat.pc
+INSTALL	libavcodec/avcodec.h
+INSTALL	libavcodec/avdct.h
+INSTALL	libavcodec/avfft.h
+INSTALL	libavcodec/d3d11va.h
+INSTALL	libavcodec/dirac.h
+INSTALL	libavcodec/dv_profile.h
+INSTALL	libavcodec/dxva2.h
+INSTALL	libavcodec/jni.h
+INSTALL	libavcodec/mediacodec.h
+INSTALL	libavcodec/qsv.h
+INSTALL	libavcodec/vaapi.h
+INSTALL	libavcodec/vda.h
+INSTALL	libavcodec/vdpau.h
+INSTALL	libavcodec/version.h
+INSTALL	libavcodec/videotoolbox.h
+INSTALL	libavcodec/vorbis_parser.h
+INSTALL	libavcodec/xvmc.h
+INSTALL	libavcodec/libavcodec.pc
+INSTALL	libswresample/swresample.h
+INSTALL	libswresample/version.h
+INSTALL	libswresample/libswresample.pc
+INSTALL	libswscale/swscale.h
+INSTALL	libswscale/version.h
+INSTALL	libswscale/libswscale.pc
+INSTALL	libavutil/adler32.h
+INSTALL	libavutil/aes.h
+INSTALL	libavutil/aes_ctr.h
+INSTALL	libavutil/application.h
+INSTALL	libavutil/attributes.h
+INSTALL	libavutil/audio_fifo.h
+INSTALL	libavutil/avassert.h
+INSTALL	libavutil/avstring.h
+INSTALL	libavutil/avutil.h
+INSTALL	libavutil/base64.h
+INSTALL	libavutil/blowfish.h
+INSTALL	libavutil/bprint.h
+INSTALL	libavutil/bswap.h
+INSTALL	libavutil/buffer.h
+INSTALL	libavutil/cast5.h
+INSTALL	libavutil/camellia.h
+INSTALL	libavutil/channel_layout.h
+INSTALL	libavutil/common.h
+INSTALL	libavutil/cpu.h
+INSTALL	libavutil/crc.h
+INSTALL	libavutil/des.h
+INSTALL	libavutil/dict.h
+INSTALL	libavutil/display.h
+INSTALL	libavutil/downmix_info.h
+INSTALL	libavutil/dns_cache.h
+INSTALL	libavutil/error.h
+INSTALL	libavutil/eval.h
+INSTALL	libavutil/fifo.h
+INSTALL	libavutil/file.h
+INSTALL	libavutil/frame.h
+INSTALL	libavutil/hash.h
+INSTALL	libavutil/hmac.h
+INSTALL	libavutil/hwcontext.h
+INSTALL	libavutil/hwcontext_cuda.h
+INSTALL	libavutil/hwcontext_d3d11va.h
+INSTALL	libavutil/hwcontext_drm.h
+INSTALL	libavutil/hwcontext_dxva2.h
+INSTALL	libavutil/hwcontext_qsv.h
+INSTALL	libavutil/hwcontext_vaapi.h
+INSTALL	libavutil/hwcontext_videotoolbox.h
+INSTALL	libavutil/hwcontext_vdpau.h
+INSTALL	libavutil/imgutils.h
+INSTALL	libavutil/intfloat.h
+INSTALL	libavutil/intreadwrite.h
+INSTALL	libavutil/lfg.h
+INSTALL	libavutil/log.h
+INSTALL	libavutil/macros.h
+INSTALL	libavutil/mathematics.h
+INSTALL	libavutil/mastering_display_metadata.h
+INSTALL	libavutil/md5.h
+INSTALL	libavutil/mem.h
+INSTALL	libavutil/motion_vector.h
+INSTALL	libavutil/murmur3.h
+INSTALL	libavutil/opt.h
+INSTALL	libavutil/parseutils.h
+INSTALL	libavutil/pixdesc.h
+INSTALL	libavutil/pixelutils.h
+INSTALL	libavutil/pixfmt.h
+INSTALL	libavutil/random_seed.h
+INSTALL	libavutil/rc4.h
+INSTALL	libavutil/rational.h
+INSTALL	libavutil/replaygain.h
+INSTALL	libavutil/ripemd.h
+INSTALL	libavutil/samplefmt.h
+INSTALL	libavutil/sha.h
+INSTALL	libavutil/sha512.h
+INSTALL	libavutil/spherical.h
+INSTALL	libavutil/stereo3d.h
+INSTALL	libavutil/threadmessage.h
+INSTALL	libavutil/time.h
+INSTALL	libavutil/timecode.h
+INSTALL	libavutil/timestamp.h
+INSTALL	libavutil/tree.h
+INSTALL	libavutil/twofish.h
+INSTALL	libavutil/version.h
+INSTALL	libavutil/xtea.h
+INSTALL	libavutil/tea.h
+INSTALL	libavutil/thread.h
+INSTALL	libavutil/lzo.h
+INSTALL	libavutil/avconfig.h
+INSTALL	libavutil/ffversion.h
+INSTALL	libavutil/libavutil.pc
+
+--------------------
+[*] link ffmpeg
+--------------------
+
+link compat/*.o
+link libavcodec/*.o
+link libavcodec/aarch64/*.o
+link libavcodec/neon/*.o
+link libavfilter/*.o
+link libavformat/*.o
+link libavutil/*.o
+link libavutil/aarch64/*.o
+link libswresample/*.o
+link libswresample/aarch64/*.o
+link libswscale/*.o
+link libswscale/aarch64/*.o
+
+--------------------
+[*] create files for shared ffmpeg
+--------------------
+
+--------------------
+[*] Finished
+--------------------
+# to continue to build ijkplayer, run script below,
+sh compile-ijk.sh 

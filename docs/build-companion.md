@@ -72,6 +72,27 @@
 显式加 `--system=linux-x86_64`，再 `touch <toolchain>/touch`，
 ijk 脚本检测到标记文件就会跳过自己的工具链生成步骤。
 
+## KDSP 集成管线验证（2026-11-09 ✅，用临时桩验证，未动核心实现）
+
+Li 给定的函数面：`kdsp_open / kdsp_read / kdsp_seek / kdsp_close` 为 URLProtocol
+四回调，另有 `kdsp_average_speed / kdsp_realtime_speed` 两个速率统计函数。
+集成三步已在构建树 `android/contrib/ffmpeg-arm64` 落地并验证：
+
+- `libavformat/protocols.c` 加了 `extern const URLProtocol ff_kdsp_protocol;`
+- `libavformat/Makefile` 加了 `OBJS-$(CONFIG_KDSP_PROTOCOL) += kdsp.o`
+- 临时桩 kdsp.c（仅构建树内，不进本仓库）重编结果：configure 自动生成
+  `#define CONFIG_KDSP_PROTOCOL 1`；ijk 重编后 `libijkffmpeg.so`（3,585,240 B）
+  中验到 `ff_kdsp_protocol` 符号与 "kdsp" 协议名字符串。日志：
+  `docs/build-logs/compile-ffmpeg-arm64-kdsp-stub.log`、`compile-ijk-arm64-kdsp-stub.log`。
+
+**坑（重要）**：ijk 的 do-compile-ffmpeg.sh 有 "reuse configure" 逻辑——源码目录
+只要已有 config.h 就跳过 configure。新增协议后若不先删
+`ffmpeg-arm64/config.h`，构建会 6 秒"成功"但新协议根本没编进去
+（make 会警告 protocols.c newer than config.h）。加协议/组件后必须删 config.h 强制重配。
+
+待办：真实 kdsp.c（四回调函数体 + 两个速率函数）替换桩文件后，
+重复上述重编即可，然后从构建树导出 patch 到 `player/ffmpeg-patch/`。
+
 ## 当前 blockers
 
 - **真机**：第 4 步需要一台 arm64 安卓手机连到服务端所在的局域网，
