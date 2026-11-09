@@ -93,6 +93,29 @@ Li 给定的函数面：`kdsp_open / kdsp_read / kdsp_seek / kdsp_close` 为 URL
 待办：真实 kdsp.c（四回调函数体 + 两个速率函数）替换桩文件后，
 重复上述重编即可，然后从构建树导出 patch 到 `player/ffmpeg-patch/`。
 
+## KDSP 实现完成（2026-11-09 ✅，Li 指示由 Muse 写实现）
+
+分工变更：Li 在看过管线验证后明确指示实现也由 Muse 写
+（“实现也交给你，按这四个函数写出来”）。成果：
+
+- `player/ffmpeg-patch/kdsp.c`（387 行）+ `kdsp.h`：四回调基于 tcp 协议分层
+  （ffurl_open "tcp://…"，与 http.c 同套路）；帧头校验/magic 逐字节重同步/
+  8 MiB 上限/序号缺口统计按 protocol.md 接收规则实现；速率统计用线上字节
+  （含帧头）+ 8 点采样环，停滞 1.5 s 后 realtime 归零。
+- Android 侧：重编通过，`libijkffmpeg.so` 导出 `ff_kdsp_protocol` 与
+  `kdsp_average_speed` / `kdsp_realtime_speed`（nm -D 实验）。
+- 正式 patch 已导出：`player/ffmpeg-patch/0001-libavformat-add-kdsp-protocol.patch`
+  （4 文件，+428 行）。
+- **主机功能测试**（`tests/host/run_tests.sh`，真实 kdsp.c + 桩 FFmpeg API +
+  真实 Python 服务端）：三项全过 —— 干净流输出与源文件逐字节一致（75 帧，
+  dropped 0）；`--drop 0.5` 时序号缺口被准确计数（某次运行 received 76 /
+  dropped 61）；流前注入 33 字节垃圾（含半截 "KD" 假 magic）后精确重同步
+  （discarded 33），输出与源文件前缀逐字节一致。
+- **测试揪出的真 bug（已修）**：服务端原来把 magic 按小端 uint32 打包，
+  线上字节是 "PSDK" 而非规格写的 "KDSP"——Python 测试客户端同样按数值
+  比较所以一直没暴露，C 接收端按字节扫描才发现。已改服务端/测试客户端
+  为 4 字节原文 `b"KDSP"`，protocol.md 的 magic 描述同步澄清。
+
 ## 当前 blockers
 
 - **真机**：第 4 步需要一台 arm64 安卓手机连到服务端所在的局域网，

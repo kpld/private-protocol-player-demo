@@ -19,7 +19,7 @@ Every frame is a fixed 22-byte little-endian header followed by the payload.
 
 | Offset | Field          | Size | Description                                        |
 |-------:|----------------|-----:|----------------------------------------------------|
-| 0      | magic          | 4 B  | `0x4B445350` — ASCII `KDSP`. Used for resync.      |
+| 0      | magic          | 4 B  | The four ASCII bytes `K` `D` `S` `P`, in that order on the wire. Used for resync. |
 | 4      | version        | 1 B  | `0x01`                                             |
 | 5      | flags          | 1 B  | bit0: keyframe. Other bits reserved, must be 0.    |
 | 6      | sequence       | 4 B  | uint32 LE, increments by 1 per frame, wraps.       |

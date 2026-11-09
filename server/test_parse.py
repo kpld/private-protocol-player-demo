@@ -15,8 +15,8 @@ import struct
 import sys
 import time
 
-MAGIC = 0x4B445350
-HEADER = struct.Struct("<IBBIQI")
+MAGIC = b"KDSP"  # 4 ASCII bytes on the wire, in this order
+HEADER = struct.Struct("<4sBBIQI")
 
 
 def recv_exact(sock, n):
@@ -46,7 +46,7 @@ def main():
         header = recv_exact(sock, HEADER.size)
         magic, version, flags, seq, ts_ms, plen = HEADER.unpack(header)
         if magic != MAGIC:
-            print(f"FAIL frame {i}: bad magic 0x{magic:08X}")
+            print(f"FAIL frame {i}: bad magic {magic!r}")
             return 1
         if version != 1:
             print(f"FAIL frame {i}: bad version {version}")

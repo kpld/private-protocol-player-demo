@@ -20,9 +20,9 @@ import struct
 import sys
 import time
 
-MAGIC = 0x4B445350  # "KDSP"
+MAGIC = b"KDSP"  # 4 ASCII bytes on the wire, in this order (spec: magic field)
 VERSION = 0x01
-HEADER = struct.Struct("<IBBIQI")  # magic, version, flags, sequence, timestamp_ms, payload_length
+HEADER = struct.Struct("<4sBBIQI")  # magic, version, flags, sequence, timestamp_ms, payload_length
 FLAG_KEYFRAME = 0x01
 
 

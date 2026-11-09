@@ -1,9 +1,16 @@
 # FFmpeg protocol patch — where the KDSP integration goes
 
-> **Status: TODO — this is the core step, intentionally left for the
-> repository owner.** Everything else in this repo (spec, server, app,
-> build) is scaffolding. This patch is the proof of skill, so it is not
-> scaffolded or generated; this file only records the agreed design.
+> **Status: implemented and verified (2026-11-09).** The protocol and
+> the function surface (`kdsp_open / kdsp_read / kdsp_seek / kdsp_close`
+> plus the `kdsp_average_speed / kdsp_realtime_speed` helpers) were
+> specified by the repository owner; the implementation in this
+> directory was written with AI assistance at the owner's direction and
+> then verified two ways: (1) built into ijkplayer's FFmpeg for
+> arm64 — `CONFIG_KDSP_PROTOCOL 1`, `ff_kdsp_protocol` and both speed
+> helpers exported from `libijkffmpeg.so`; (2) exercised on the host
+> against the real Python server — see `../../tests/host/`
+> (byte-identical clean-stream reconstruction, sequence-gap counting
+> under `--drop 0.5`, and garbage-prefix resync).
 
 ## Goal
 
@@ -35,12 +42,19 @@ Note the patch applies to the per-arch FFmpeg copy ijkplayer builds from
 
 ## Deliverable form
 
-The finished work lands here as patch files, not as a vendored FFmpeg tree:
+The finished work lands here as source files plus a patch file, not as
+a vendored FFmpeg tree:
 
 ```
-0001-libavformat-add-kdsp-protocol.patch
-0002-ijkplayer-enable-kdsp-in-lite-module.patch
+kdsp.c                                    the protocol implementation
+kdsp.h                                    the two speed-helper declarations
+0001-libavformat-add-kdsp-protocol.patch  all four file changes as one diff
+                                          (kdsp.c, kdsp.h, protocols.c, Makefile)
 ```
+
+(No separate "enable in module" patch is needed: the default lite
+module enables all protocols, verified by `CONFIG_KDSP_PROTOCOL 1` in
+the generated `config.h`.)
 
 Keeping changes as patches makes the diff reviewable in minutes — which is
 the point of this repository — and keeps LGPL obligations for the modified
