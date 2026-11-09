@@ -43,10 +43,15 @@
 | 4 | 一起 | 安卓 App 连 `kdsp://` 打服务端流，排错（whitelist、demuxer 探测、硬解开关） | 手机上播出画面 + 录屏存 `docs/screenshots/` |
 | 5 | Muse | 更新 README 实测数据、延迟测试表、发布前检查 | 仓库达到可公开状态，等 Li 定 GitHub 账号后推送 |
 
-## 当前 blockers（开工前要定的）
+## 构建环境（2026-11-09 已就绪，Li 选了在 VM 上构建）
 
-- **构建在哪跑**：本 VM 目前没有 JDK/NDK/Docker。两个选项：
-  (a) 经 Li 同意后在 VM 上装 JDK + NDK r10e（下载量约 1–2 GB 量级），
-  Muse 全程陪跑；(b) 在 Li 自己的电脑上构建，Muse 远程陪排错。
+- JDK：Amazon Corretto OpenJDK 17.0.21，`~/opt/jdk-17`（`java`/`javac` 已验）
+- NDK：r10e-rc4 (64-bit)，`~/opt/android-ndk-r10e`，已实测：`ndk-build` 可运行，
+  aarch64-linux-android-4.9 的 gcc 能在本机跑并用 android-21/arm64 sysroot
+  编出合法的 ARM aarch64 目标文件——老工具链在本 VM 上能用的最大未知数已排除。
+- 磁盘：装完后 VM 仍有约 146 GB 可用。
+
+## 当前 blockers
+
 - **真机**：第 4 步需要一台 arm64 安卓手机连到服务端所在的局域网，
   这一步只能在 Li 的环境里完成。
