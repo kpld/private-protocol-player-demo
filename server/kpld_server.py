@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+"""KPLD demo streaming server.
+
+Reads a raw H.264 elementary stream (with AUD NAL units, see
+generate_sample.sh), packetises it into KPLD frames (see ../protocol.md)
+and streams it over TCP, paced at the stream's frame rate, looping forever.
+
+Weak-network simulation:
+  --drop 0.05    drop 5% of frames (the player's loss counter should move)
+  --jitter 40    add +/-40 ms random jitter to the send pacing
+  --delay 200    add a fixed 200 ms delay before each frame
+
+Usage:
+  python3 kpld_server.py --file sample.h264 --port 19350
+"""
+import argparse
+import random
+import socket
+import struct
+import sys
+import time
+
+MAGIC = 0x4B504C44  # "KPLD"
+VERSION = 0x01
+HEADER = struct.Struct("<IBBIQI")  # magic, version, flags, sequence, timestamp_ms, payload_length
+FLAG_KEYFRAME = 0x01
+
+
+def split_access_units(data: bytes):
+    """Split an Annex B H.264 stream into access units at AUD boundaries.
+
+    The sample generator inserts AUDs (x264 aud=1). Each returned AU starts
+    with a start code. If the stream has no AUDs we fall back to treating
+    every VCL NAL as its own AU, which is wrong for multi-slice frames but
+    keeps the server usable for simple streams.
+    """
+    # Find all start codes (3- or 4-byte) with a C-speed regex scan; a
+    # byte-by-byte Python loop over tens of MB is far too slow.
+    import re
+    n = len(data)
+    nals = []  # (start_code_begin, nal_header_offset, nal_type)
+    for m in re.finditer(rb"\x00\x00(?:\x00)?\x01", data):
+        hdr = m.end()
+        nal_type = data[hdr] & 0x1F if hdr < n else 0
+        nals.append((m.start(), hdr, nal_type))
+    if not nals:
+        raise ValueError("no Annex B start codes found — is this a raw .h264 file?")
+
+    bounds = []
+    for idx, (begin, _hdr, nal_type) in enumerate(nals):
+        end = nals[idx + 1][0] if idx + 1 < len(nals) else n
+        bounds.append((begin, end, nal_type))
+
+    aus, current = [], []
+    has_aud = any(t == 9 for _, _, t in bounds)
+    for begin, end, nal_type in bounds:
+        chunk = data[begin:end]
+        if has_aud:
+            if nal_type == 9 and current:
+                aus.append(b"".join(current))
+                current = []
+            current.append(chunk)
+        else:
+            if nal_type in (1, 5) and current:
+                aus.append(b"".join(current))
+                current = []
+            current.append(chunk)
+    if current:
+        aus.append(b"".join(current))
+
+    def is_keyframe(au: bytes) -> bool:
+        return b"\x00\x00\x00\x01\x65" in au or b"\x00\x00\x01\x65" in au
+
+    return [(au, is_keyframe(au)) for au in aus]
+
+
+def serve_client(conn, aus, args, rng):
+    frame_interval = 1.0 / args.fps
+    seq = 0
+    sent = dropped = 0
+    print(f"[server] client connected, streaming {len(aus)} frames in a loop", flush=True)
+    try:
+        while True:
+            for au, keyframe in aus:
+                t0 = time.monotonic()
+                if rng.random() < args.drop:
+                    dropped += 1
+                    seq += 1
+                    continue
+                if args.delay:
+                    time.sleep(args.delay / 1000.0)
+                ts_ms = int(time.time() * 1000)
+                header = HEADER.pack(
+                    MAGIC, VERSION, FLAG_KEYFRAME if keyframe else 0,
+                    seq & 0xFFFFFFFF, ts_ms, len(au),
+                )
+                conn.sendall(header + au)
+                sent += 1
+                seq += 1
+                elapsed = time.monotonic() - t0
+                jitter = rng.uniform(-args.jitter, args.jitter) / 1000.0 if args.jitter else 0.0
+                time.sleep(max(0.0, frame_interval - elapsed + jitter))
+    except (BrokenPipeError, ConnectionResetError):
+        print(f"[server] client disconnected (sent={sent}, dropped={dropped})", flush=True)
+
+
+def main():
+    ap = argparse.ArgumentParser(description="KPLD demo streaming server")
+    ap.add_argument("--file", default="sample.h264", help="raw H.264 elementary stream with AUDs")
+    ap.add_argument("--port", type=int, default=19350)
+    ap.add_argument("--fps", type=float, default=25.0, help="send pacing (match the sample's frame rate)")
+    ap.add_argument("--drop", type=float, default=0.0, help="frame drop probability, e.g. 0.05")
+    ap.add_argument("--jitter", type=float, default=0.0, help="+/- jitter in ms")
+    ap.add_argument("--delay", type=float, default=0.0, help="fixed extra delay per frame in ms")
+    args = ap.parse_args()
+
+    with open(args.file, "rb") as f:
+        data = f.read()
+    aus = split_access_units(data)
+    print(f"[server] loaded {args.file}: {len(data)} bytes, {len(aus)} access units", flush=True)
+
+    rng = random.Random(20261109)
+    srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    srv.bind(("0.0.0.0", args.port))
+    srv.listen(1)
+    print(f"[server] listening on 0.0.0.0:{args.port} (kpld://<this-host>:{args.port})", flush=True)
+    try:
+        while True:
+            conn, addr = srv.accept()
+            print(f"[server] connection from {addr}", flush=True)
+            with conn:
+                serve_client(conn, aus, args, rng)
+    except KeyboardInterrupt:
+        print("\n[server] stopped", flush=True)
+        return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

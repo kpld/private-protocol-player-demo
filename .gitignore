@@ -1,0 +1,26 @@
+# generated media
+server/sample.h264
+server/sample.aac
+*.h264
+*.aac
+
+# android / gradle
+.gradle/
+build/
+local.properties
+*.apk
+*.aab
+captures/
+
+# native build output
+player/ijkplayer/
+*.so
+
+# python
+__pycache__/
+*.pyc
+
+# os / editor
+.DS_Store
+.idea/
+*.swp
