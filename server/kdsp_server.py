@@ -102,6 +102,11 @@ def serve_client(conn, aus, args, rng):
                 time.sleep(max(0.0, frame_interval - elapsed + jitter))
     except (BrokenPipeError, ConnectionResetError):
         print(f"[server] client disconnected (sent={sent}, dropped={dropped})", flush=True)
+    except KeyboardInterrupt:
+        # Ctrl+C during streaming: report the session, then let main()
+        # print the shutdown line and exit cleanly (no traceback).
+        print(f"[server] interrupted (sent={sent}, dropped={dropped})", flush=True)
+        raise
 
 
 def main():
@@ -132,8 +137,12 @@ def main():
             with conn:
                 serve_client(conn, aus, args, rng)
     except KeyboardInterrupt:
-        print("\n[server] stopped", flush=True)
+        # Ctrl+C, whether it lands in accept() or mid-stream (re-raised
+        # by serve_client): shut down quietly, exit code 0.
+        print("\n[server] stopped by Ctrl+C", flush=True)
         return 0
+    finally:
+        srv.close()
 
 
 if __name__ == "__main__":
