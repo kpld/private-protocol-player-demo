@@ -15,15 +15,20 @@ into an FFmpeg-based Android player:
 3. the player-side integration in FFmpeg's protocol layer for ijkplayer, so
    the Android app can simply open `kdsp://host:port` (`player/`);
 4. a minimal Android demo app with live playback stats: first-frame time,
-   estimated latency, frame rate, bitrate, dropped frames, auto-reconnect.
+   elapsed playback time, video size, auto-reconnect counting. (The
+   protocol layer also tracks dropped frames and wire bitrate; those
+   counters are currently logged natively, not yet surfaced in the app UI.)
 
-> Status: **skeleton / work in progress.** The protocol spec, the streaming
-> server (tested), the Android app skeleton, and the build documentation are
-> in place. The FFmpeg protocol implementation itself is the next step — see
-> `player/ffmpeg-patch/README.md` for exactly where it goes and why.
-> A standard player cannot play the demo stream; the patched player can.
-> (Comparison screenshots land in `docs/screenshots/` once the player patch
-> is built.)
+> Status: **complete and verified end-to-end (2026-11-10).** The FFmpeg
+> protocol implementation lives in `player/ffmpeg-patch/`, the arm64 build
+> is reproducible from `player/ijkplayer-build.md`, and the demo app was
+> verified playing on a real Android phone over a LAN (first frame
+> 5,260 ms — most of it raw-stream probing; 1280×720 at 25 fps). A stock
+> player cannot play this stream; the patched player can. The full
+> diagnosis trail, including a failed first device test and its root
+> cause, is recorded in `docs/build-companion.md`.
+
+![Real-device playback on an Android phone](docs/device-playback-2026-11-10.jpg)
 
 ## Quick start
 
@@ -59,9 +64,9 @@ python3 kdsp_server.py --file sample.h264 --port 19350
 protocol.md            KDSP protocol specification (fictional)
 server/                streaming server + sample generator (Python, tested)
 player/ffmpeg-patch/   where the FFmpeg protocol code goes, and why there
-player/app/            Android demo app (skeleton)
+player/app/            Android demo app
 player/ijkplayer-build.md   reproducible custom build notes
-docs/                  latency test notes, screenshots
+docs/                  build & diagnosis notes, real-device screenshot
 docker/                frozen build environment for the native stack
 ```
 
