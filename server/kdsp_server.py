@@ -12,13 +12,27 @@ Weak-network simulation:
 
 Usage:
   python3 kdsp_server.py --file sample.h264 --port 19350
+
+Ctrl+C stops the server. The stop works by polling a flag set by the
+SIGINT handler (the accept loop and the pacing sleeps wake up
+periodically to check it), because a blocking accept() cannot be
+interrupted by Ctrl+C on Windows at all, and only unreliably elsewhere.
 """
 import argparse
 import random
+import signal
 import socket
 import struct
 import sys
+import threading
 import time
+
+STOP = threading.Event()  # set by the SIGINT handler; polled by every wait
+
+
+def _on_sigint(signum, frame):
+    STOP.set()
+
 
 MAGIC = b"KDSP"  # 4 ASCII bytes on the wire, in this order (spec: magic field)
 VERSION = 0x01
@@ -79,34 +93,48 @@ def serve_client(conn, aus, args, rng):
     seq = 0
     sent = dropped = 0
     print(f"[server] client connected, streaming {len(aus)} frames in a loop", flush=True)
+    # A short send timeout keeps any single sendall() from blocking for
+    # long; on timeout we just re-check the stop flag and carry on.
+    conn.settimeout(2.0)
     try:
-        while True:
+        while not STOP.is_set():
             for au, keyframe in aus:
+                if STOP.is_set():
+                    break
                 t0 = time.monotonic()
                 if rng.random() < args.drop:
                     dropped += 1
                     seq += 1
                     continue
-                if args.delay:
-                    time.sleep(args.delay / 1000.0)
+                if args.delay and STOP.wait(args.delay / 1000.0):
+                    break
                 ts_ms = int(time.time() * 1000)
                 header = HEADER.pack(
                     MAGIC, VERSION, FLAG_KEYFRAME if keyframe else 0,
                     seq & 0xFFFFFFFF, ts_ms, len(au),
                 )
-                conn.sendall(header + au)
+                while True:
+                    try:
+                        conn.sendall(header + au)
+                        break
+                    except socket.timeout:
+                        if STOP.is_set():
+                            break
+                if STOP.is_set():
+                    break
                 sent += 1
                 seq += 1
                 elapsed = time.monotonic() - t0
                 jitter = rng.uniform(-args.jitter, args.jitter) / 1000.0 if args.jitter else 0.0
-                time.sleep(max(0.0, frame_interval - elapsed + jitter))
+                # STOP.wait doubles as the pacing sleep: it returns the
+                # instant Ctrl+C is pressed instead of sleeping through it.
+                if STOP.wait(max(0.0, frame_interval - elapsed + jitter)):
+                    break
     except (BrokenPipeError, ConnectionResetError):
         print(f"[server] client disconnected (sent={sent}, dropped={dropped})", flush=True)
-    except KeyboardInterrupt:
-        # Ctrl+C during streaming: report the session, then let main()
-        # print the shutdown line and exit cleanly (no traceback).
+        return
+    if STOP.is_set():
         print(f"[server] interrupted (sent={sent}, dropped={dropped})", flush=True)
-        raise
 
 
 def main():
@@ -124,25 +152,34 @@ def main():
     aus = split_access_units(data)
     print(f"[server] loaded {args.file}: {len(data)} bytes, {len(aus)} access units", flush=True)
 
+    # Ctrl+C only sets the STOP flag (see module docstring): every
+    # blocking wait below polls it, so the stop works on Windows too,
+    # where a blocking accept() never raises KeyboardInterrupt.
+    signal.signal(signal.SIGINT, _on_sigint)
+
     rng = random.Random(20261109)
     srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     srv.bind(("0.0.0.0", args.port))
     srv.listen(1)
+    srv.settimeout(0.5)  # accept() wakes up twice a second to poll STOP
     print(f"[server] listening on 0.0.0.0:{args.port} (kdsp://<this-host>:{args.port})", flush=True)
     try:
-        while True:
-            conn, addr = srv.accept()
+        while not STOP.is_set():
+            try:
+                conn, addr = srv.accept()
+            except socket.timeout:
+                continue
             print(f"[server] connection from {addr}", flush=True)
             with conn:
                 serve_client(conn, aus, args, rng)
     except KeyboardInterrupt:
-        # Ctrl+C, whether it lands in accept() or mid-stream (re-raised
-        # by serve_client): shut down quietly, exit code 0.
-        print("\n[server] stopped by Ctrl+C", flush=True)
-        return 0
+        pass  # backstop for platforms where Ctrl+C does raise
     finally:
         srv.close()
+    if STOP.is_set():
+        print("\n[server] stopped by Ctrl+C", flush=True)
+    return 0
 
 
 if __name__ == "__main__":

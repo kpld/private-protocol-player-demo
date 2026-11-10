@@ -152,3 +152,8 @@ Li 给定的函数面：`kdsp_open / kdsp_read / kdsp_seek / kdsp_close` 为 URL
   4. 因果复现：主机 ffprobe 按手机原配置（demuxer 禁用）重编后，开同一流报错 “Invalid data found when processing input”，服务端计数同样是 **sent=53** —— 与真机分毫不差，根因锁定。
 - 修复：构建树 `config/module.sh` 由软链改为 module-lite.sh 副本 + 追加 `--enable-demuxer=h264`；删 config.h 强制重配；compile-ffmpeg/compile-ijk 均 exit 0，新 config.h 为 `CONFIG_H264_DEMUXER 1`，libavformat.a 中新增 h264dec.o（与 kdsp.o 并存）；重打 AAR + APK（2,052,293 字节，MD5 190efb62ab4278fae6256eaa13a0b3b3）。步骤已写入 player/ijkplayer-build.md（含 REQUIRED 标注与 pitfall 4）。
 - 状态：新 APK 待 Li 真机复测。
+
+## 真机复测通过（2026-11-10）+ 服务端 Ctrl+C 跨平台修复
+
+- Li 用修复版 APK 真机复测：**播放成功**。截图 docs/device-playback-2026-11-10.jpg：state=playing，1280x720，elapsed 10s 持续播放，状态栏流量 ~401 KB/s。首帧 5260 ms，与台架 ffprobe 烧满 max_analyze_duration（5 s）的预测一致——这是裸码流探测的固定开销，后续可通过调小 analyzeduration/probesize 优化，非缺陷。HUD 的 reconnects=4 是本次会话内早前失败尝试的累计计数（App 内计数器跨重试不清零）。
+- kdsp_server.py 的 Ctrl+C 二次修复：首版只靠捕获 KeyboardInterrupt，在 Li 的 Windows 机器上 listen 状态按 Ctrl+C 无反应——Windows 下 Python 的阻塞 accept() 不抛 KeyboardInterrupt（须等到有连接进来才处理），Linux 验证未覆盖此差异。改法：SIGINT 处理函数只置 STOP 标志；监听 socket settimeout(0.5) 轮询 accept；推流节拍用 STOP.wait() 代替 time.sleep；sendall 设 2 秒超时并轮询标志。空闲/推流两种状态 SIGINT 实测均干净退出（exit 0、无 traceback），协议三件套回归测试全过。
