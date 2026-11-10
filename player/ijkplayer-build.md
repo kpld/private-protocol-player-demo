@@ -28,6 +28,17 @@ cd android/contrib/ffmpeg-arm64
 patch -p1 < <this-repo>/player/ffmpeg-patch/0001-libavformat-add-kdsp-protocol.patch
 cd ../..
 
+# REQUIRED build customisation: enable the raw H.264 demuxer.
+# ijkplayer's stock module config (config/module-lite.sh) disables all
+# demuxers except a fixed list (mp4/flv/ts/... plus the *hevc* raw
+# demuxer) — the raw *h264* demuxer is NOT in it. The kdsp protocol
+# presents a raw H.264 byte stream, so without this the player cannot
+# identify the stream format and fails probing (see pitfall 4).
+# Replace the config/module.sh symlink with a copy plus one line:
+cd config && rm module.sh && cp module-lite.sh module.sh
+echo 'export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=h264"' >> module.sh
+cd ..
+
 # Compile FFmpeg, then ijkplayer (argument is "arm64", not "arm64-v8a")
 cd android/contrib && ./compile-ffmpeg.sh arm64
 cd .. && ./compile-ijk.sh arm64
@@ -48,6 +59,16 @@ Pitfalls actually hit (all recorded in `docs/build-companion.md`):
 3. **16 KB page size**: stock k0.8.8 native libraries are not 16 KB-aligned.
    For a LAN demo on a current device this is usually not blocking; for
    Play-store distribution it is a separate work item.
+4. **Missing raw H.264 demuxer (found by the first real-device test,
+   2026-11-10)**: with a stock module config, the phone connected,
+   received ~53 frames, then the player closed the connection with no
+   picture — `CONFIG_H264_DEMUXER 0` means libavformat has no demuxer
+   for the raw H.264 stream kdsp presents, so probing fails
+   deterministically ("Invalid data found when processing input").
+   Reproduced bit-exactly on the host with the same FFmpeg version:
+   demuxer disabled → failure after exactly 53 frames; enabled →
+   open/probe/decode all pass. Fix: the module customisation step
+   above; verify `CONFIG_H264_DEMUXER 1` in the generated config.h.
 
 ## Demo app build
 

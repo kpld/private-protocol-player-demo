@@ -141,3 +141,14 @@ Li 给定的函数面：`kdsp_open / kdsp_read / kdsp_seek / kdsp_close` 为 URL
 - Result: app-debug.apk (2,051,023 bytes), package demo.kdsp.player,
   minSdk 21 / targetSdk 34; packaged libijkffmpeg.so verified to contain
   ff_kdsp_protocol and the kdsp protocol name string.
+
+## 真机首测失败与根因修复（2026-11-10）
+
+- Li 真机首测：App 连上 kdsp_server.py 后约 2 秒断开、无画面；服务端两次连接均 `sent=53, dropped=0` 后断开。
+- 台架排查（全部在本机完成，未让 Li 反复试错）：
+  1. 协议层：新增分片中继测试（200–1400 字节随机分片 + 1 ms 延时，模拟 Wi-Fi 分段），kdsp.c 接收输出仍逐字节一致 → 排除 partial-read/分片问题。
+  2. 用 ijk 同款 FFmpeg 3.4 源码 + KDSP patch 在主机编出 ffprobe：开流/探测/解码 200 帧全部正常 → 协议 + 解复用 + 解码链路本身没问题。
+  3. 逐项比对手机内 FFmpeg 的实际 config.h，发现 **`CONFIG_H264_DEMUXER 0`**：ijk 的 module-lite 默认禁用全部 demuxer 后只启用固定清单（mp4/flv/ts 等容器 + hevc 裸流），**漏了 h264 裸流 demuxer**。kdsp 呈现的是裸 H.264 码流，无 demuxer 可认，探测必然失败。
+  4. 因果复现：主机 ffprobe 按手机原配置（demuxer 禁用）重编后，开同一流报错 “Invalid data found when processing input”，服务端计数同样是 **sent=53** —— 与真机分毫不差，根因锁定。
+- 修复：构建树 `config/module.sh` 由软链改为 module-lite.sh 副本 + 追加 `--enable-demuxer=h264`；删 config.h 强制重配；compile-ffmpeg/compile-ijk 均 exit 0，新 config.h 为 `CONFIG_H264_DEMUXER 1`，libavformat.a 中新增 h264dec.o（与 kdsp.o 并存）；重打 AAR + APK（2,052,293 字节，MD5 190efb62ab4278fae6256eaa13a0b3b3）。步骤已写入 player/ijkplayer-build.md（含 REQUIRED 标注与 pitfall 4）。
+- 状态：新 APK 待 Li 真机复测。
