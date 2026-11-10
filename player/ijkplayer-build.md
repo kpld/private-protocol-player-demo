@@ -69,6 +69,14 @@ Pitfalls actually hit (all recorded in `docs/build-companion.md`):
    demuxer disabled → failure after exactly 53 frames; enabled →
    open/probe/decode all pass. Fix: the module customisation step
    above; verify `CONFIG_H264_DEMUXER 1` in the generated config.h.
+5. **Unstable debug signature across build machines**: AGP's default
+   debug keystore is auto-generated per environment, so APKs built in
+   different environments carry different certificates and Android
+   refuses to install one over the other ("signature mismatch"). The
+   app therefore signs debug builds with the committed throwaway key
+   `player/demo-debug.keystore` (see `signingConfigs` in
+   `player/app/build.gradle`), keeping the signature identical for
+   every build of this demo. Demo key only — never ship it.
 
 ## Demo app build
 
